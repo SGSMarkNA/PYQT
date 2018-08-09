@@ -1,0 +1,1633 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <author>Drew Loveridge</author>
+ <class>Config_Assembly_System</class>
+ <widget class="MAIN_CONFIG_WINDOW" name="Config_Assembly_System">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>932</width>
+    <height>822</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="dockOptions">
+   <set>QMainWindow::AllowNestedDocks|QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks</set>
+  </property>
+  <property name="Assembly_Assinment_Types" stdset="0">
+   <cstring>Assembly_Layer:
+Assembly_Model:
+Assembly_Group:</cstring>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <item>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="Assembly_Assignment_Grid_Tab">
+       <attribute name="title">
+        <string>Assembly Assignment Grid</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_4">
+        <item>
+         <widget class="ASSIGNMENT_GRID_TABLE_VIEW" name="Assembly_Assignment_Grid_Table_View">
+          <attribute name="horizontalHeaderCascadingSectionResizes">
+           <bool>true</bool>
+          </attribute>
+          <attribute name="horizontalHeaderStretchLastSection">
+           <bool>true</bool>
+          </attribute>
+          <attribute name="verticalHeaderCascadingSectionResizes">
+           <bool>true</bool>
+          </attribute>
+          <attribute name="verticalHeaderStretchLastSection">
+           <bool>true</bool>
+          </attribute>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="Master_Config_Data_Tree_Tab">
+       <attribute name="title">
+        <string>Config Data Master Tree</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_15">
+        <item>
+         <widget class="BASE_TREE_VIEW" name="Master_Config_Data_Model_tree_View"/>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>932</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="action_File_Open"/>
+    <addaction name="action_File_Save"/>
+   </widget>
+   <widget class="QMenu" name="menuMaya">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="title">
+     <string>Maya</string>
+    </property>
+    <addaction name="action_Generate_Display_Layers"/>
+    <addaction name="action_Generate_Render_Layers"/>
+    <addaction name="separator"/>
+    <addaction name="action_Assembly_Groups_To_States"/>
+    <addaction name="action_Assembly_Groups_To_Part_Sets"/>
+    <addaction name="action_Assign_State_Overides"/>
+   </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuMaya"/>
+   <addaction name="menuView"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="action_Toggle_Dock_Viz_AA"/>
+   <addaction name="action_Toggle_Dock_Viz_AC"/>
+   <addaction name="separator"/>
+  </widget>
+  <widget class="QDockWidget" name="Assembly_Entity_Assignments_Dock">
+   <property name="windowTitle">
+    <string>Assembly Assinements</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="Assembly_Assignments_Dock_Contents">
+    <layout class="QVBoxLayout" name="verticalLayout_35">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <property name="leftMargin">
+      <number>1</number>
+     </property>
+     <property name="topMargin">
+      <number>1</number>
+     </property>
+     <property name="rightMargin">
+      <number>1</number>
+     </property>
+     <property name="bottomMargin">
+      <number>1</number>
+     </property>
+     <item>
+      <widget class="QComboBox" name="Assembly_Assignment_Section_Switch">
+       <item>
+        <property name="text">
+         <string>Model And Layer Relationships</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../Icons/Config_Assembly_System.qrc">
+          <normaloff>:/ui/AM_AL_Relationships.png</normaloff>:/ui/AM_AL_Relationships.png</iconset>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Group And Layer Relationships</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../Icons/Config_Assembly_System.qrc">
+          <normaloff>:/ui/AG_AL_Relationships.png</normaloff>:/ui/AG_AL_Relationships.png</iconset>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QStackedWidget" name="Assembly_Assignment_Sections">
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="Layer_To_Model_Relationship_Page">
+        <layout class="QVBoxLayout" name="verticalLayout_18">
+         <property name="spacing">
+          <number>1</number>
+         </property>
+         <property name="leftMargin">
+          <number>1</number>
+         </property>
+         <property name="topMargin">
+          <number>1</number>
+         </property>
+         <property name="rightMargin">
+          <number>1</number>
+         </property>
+         <property name="bottomMargin">
+          <number>1</number>
+         </property>
+         <item>
+          <layout class="QVBoxLayout" name="Layer_To_Model_Relationship_VLayout">
+           <item>
+            <widget class="QComboBox" name="Layer_To_Model_Style_Switch">
+             <item>
+              <property name="text">
+               <string>Model Centrice</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Layer Centrice</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <widget class="QStackedWidget" name="Layer_To_Model_Assignment_Styles">
+             <property name="currentIndex">
+              <number>0</number>
+             </property>
+             <widget class="QWidget" name="Model_To_Layer_Assignment_Style_Page">
+              <layout class="QVBoxLayout" name="verticalLayout_16">
+               <property name="spacing">
+                <number>7</number>
+               </property>
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <layout class="QVBoxLayout" name="Model_To_Layer_Assignment_Style_VLayout">
+                 <property name="spacing">
+                  <number>7</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QFrame" name="Model_To_Layer_Assignment_Style_Buttons">
+                   <property name="frameShape">
+                    <enum>QFrame::Box</enum>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_3">
+                    <property name="leftMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>2</number>
+                    </property>
+                    <item>
+                     <widget class="QPushButton" name="Model_To_Layer_Assign_Button">
+                      <property name="text">
+                       <string>Assign</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="Model_To_Layer_Unassign_Button">
+                      <property name="text">
+                       <string>Unassign</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QSplitter" name="Model_To_Layer_Assignment_Style_splitter">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>1</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="frameShape">
+                    <enum>QFrame::Box</enum>
+                   </property>
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <widget class="QGroupBox" name="Model_To_Layer_AG_Container">
+                    <property name="title">
+                     <string>Assembly Models</string>
+                    </property>
+                    <layout class="QVBoxLayout" name="verticalLayout_14">
+                     <property name="spacing">
+                      <number>2</number>
+                     </property>
+                     <property name="leftMargin">
+                      <number>2</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>2</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>2</number>
+                     </property>
+                     <property name="bottomMargin">
+                      <number>2</number>
+                     </property>
+                     <item>
+                      <widget class="BASE_LIST_VIEW" name="Model_To_Layer_AG_List_View">
+                       <property name="Root_Index_Assembly_Type" stdset="0">
+                        <string>Models</string>
+                       </property>
+                       <property name="Data_Model_Name" stdset="0">
+                        <string>config_data_model</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                   <widget class="QGroupBox" name="Model_To_Layer_AL_Container">
+                    <property name="title">
+                     <string>Assembly Layers</string>
+                    </property>
+                    <layout class="QVBoxLayout" name="verticalLayout_20">
+                     <property name="spacing">
+                      <number>2</number>
+                     </property>
+                     <property name="leftMargin">
+                      <number>2</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>2</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>2</number>
+                     </property>
+                     <property name="bottomMargin">
+                      <number>2</number>
+                     </property>
+                     <item>
+                      <widget class="BASE_LIST_VIEW" name="Model_To_Layer_AL_List_View">
+                       <property name="selectionMode">
+                        <enum>QAbstractItemView::ExtendedSelection</enum>
+                       </property>
+                       <property name="Root_Index_Assembly_Type" stdset="0">
+                        <string>Layers</string>
+                       </property>
+                       <property name="Data_Model_Name" stdset="0">
+                        <string>config_data_model</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="Layer_To_Model_Assignment_Style_Page">
+              <layout class="QVBoxLayout" name="verticalLayout_17">
+               <property name="spacing">
+                <number>7</number>
+               </property>
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <layout class="QVBoxLayout" name="Layer_To_Model_Assignment_Style_VLayout">
+                 <item>
+                  <widget class="QFrame" name="Layer_To_Model_Assignment_Buttons">
+                   <property name="frameShape">
+                    <enum>QFrame::Box</enum>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout">
+                    <property name="leftMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>2</number>
+                    </property>
+                    <item>
+                     <widget class="QPushButton" name="Layer_To_Model_Assign_Button">
+                      <property name="text">
+                       <string>Assign</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="Layer_To_Model_Unassign_Button">
+                      <property name="text">
+                       <string>Unassign</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QSplitter" name="Layer_To_Model_Assignment_Style_splitter">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>1</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="frameShape">
+                    <enum>QFrame::Box</enum>
+                   </property>
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <widget class="QGroupBox" name="Layer_To_Model_AL_List_Container">
+                    <property name="title">
+                     <string>Assembly Layers</string>
+                    </property>
+                    <layout class="QVBoxLayout" name="verticalLayout_19">
+                     <property name="spacing">
+                      <number>2</number>
+                     </property>
+                     <property name="leftMargin">
+                      <number>2</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>2</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>2</number>
+                     </property>
+                     <property name="bottomMargin">
+                      <number>2</number>
+                     </property>
+                     <item>
+                      <widget class="BASE_LIST_VIEW" name="Layer_To_Model_AL_List_View">
+                       <property name="Root_Index_Assembly_Type" stdset="0">
+                        <string>Layers</string>
+                       </property>
+                       <property name="Data_Model_Name" stdset="0">
+                        <string>config_data_model</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                   <widget class="QGroupBox" name="Layer_To_Model_AG_List_Container">
+                    <property name="title">
+                     <string>Assembly Models</string>
+                    </property>
+                    <layout class="QVBoxLayout" name="verticalLayout_3">
+                     <property name="spacing">
+                      <number>2</number>
+                     </property>
+                     <property name="leftMargin">
+                      <number>2</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>2</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>2</number>
+                     </property>
+                     <property name="bottomMargin">
+                      <number>2</number>
+                     </property>
+                     <item>
+                      <widget class="BASE_LIST_VIEW" name="Layer_To_Model_AG_List_View">
+                       <property name="selectionMode">
+                        <enum>QAbstractItemView::ExtendedSelection</enum>
+                       </property>
+                       <property name="layoutMode">
+                        <enum>QListView::Batched</enum>
+                       </property>
+                       <property name="Root_Index_Assembly_Type" stdset="0">
+                        <string>Models</string>
+                       </property>
+                       <property name="Data_Model_Name" stdset="0">
+                        <string>config_data_model</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="Layer_To_Group_Relationship_Page">
+        <layout class="QVBoxLayout" name="verticalLayout_34">
+         <item>
+          <layout class="QVBoxLayout" name="Layer_To_Group_Relationship_VLayout">
+           <item>
+            <widget class="QComboBox" name="Layer_To_Group_Assinment_Style_Switch">
+             <item>
+              <property name="text">
+               <string>Group Centrice</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Layer Centrice</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <widget class="QStackedWidget" name="Layer_To_Group_Assignment_Styles">
+             <property name="currentIndex">
+              <number>1</number>
+             </property>
+             <widget class="QWidget" name="Group_To_Layer_Assignment_Style_Page">
+              <layout class="QVBoxLayout" name="verticalLayout_29">
+               <property name="spacing">
+                <number>7</number>
+               </property>
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <layout class="QHBoxLayout" name="Group_To_Layer_Assignment_Style_HLayout">
+                 <item>
+                  <widget class="QGroupBox" name="Group_To_Layer_AG_List_Container">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                     <horstretch>1</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="title">
+                    <string>Assembly Group</string>
+                   </property>
+                   <layout class="QVBoxLayout" name="verticalLayout_31">
+                    <property name="spacing">
+                     <number>2</number>
+                    </property>
+                    <property name="leftMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>2</number>
+                    </property>
+                    <item>
+                     <widget class="BASE_LIST_VIEW" name="Group_To_Layer_AG_List_View">
+                      <property name="Root_Index_Assembly_Type" stdset="0">
+                       <string>Groups</string>
+                      </property>
+                      <property name="Data_Model_Name" stdset="0">
+                       <string>config_data_model</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="Group_To_Layer_Assign_Button">
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="icon">
+                    <iconset resource="../Icons/Config_Assembly_System.qrc">
+                     <normaloff>:/ui/input.png</normaloff>:/ui/input.png</iconset>
+                   </property>
+                   <property name="iconSize">
+                    <size>
+                     <width>32</width>
+                     <height>32</height>
+                    </size>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QGroupBox" name="Group_To_Layer_AL_List_Container">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                     <horstretch>1</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="title">
+                    <string>Assembly Layers</string>
+                   </property>
+                   <layout class="QVBoxLayout" name="verticalLayout_32">
+                    <property name="spacing">
+                     <number>2</number>
+                    </property>
+                    <property name="leftMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>2</number>
+                    </property>
+                    <item>
+                     <widget class="BASE_LIST_VIEW" name="Group_To_Layer_AL_List_View">
+                      <property name="selectionMode">
+                       <enum>QAbstractItemView::ExtendedSelection</enum>
+                      </property>
+                      <property name="Root_Index_Assembly_Type" stdset="0">
+                       <string>Layers</string>
+                      </property>
+                      <property name="Data_Model_Name" stdset="0">
+                       <string>config_data_model</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="Layer_To_Group_Assignment_Style_Page">
+              <layout class="QVBoxLayout" name="verticalLayout_33">
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <layout class="QHBoxLayout" name="Layer_To_Group_Assignment_Style_HLayout">
+                 <item>
+                  <widget class="QGroupBox" name="Layer_To_Group_AL_List_Container">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                     <horstretch>1</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="title">
+                    <string>Assembly Layer</string>
+                   </property>
+                   <layout class="QVBoxLayout" name="verticalLayout_43">
+                    <property name="spacing">
+                     <number>2</number>
+                    </property>
+                    <property name="leftMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>2</number>
+                    </property>
+                    <item>
+                     <widget class="BASE_LIST_VIEW" name="Layer_To_Group_AL_List_View">
+                      <property name="Root_Index_Assembly_Type" stdset="0">
+                       <string>Layers</string>
+                      </property>
+                      <property name="Data_Model_Name" stdset="0">
+                       <string>config_data_model</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="Layer_To_Group_Assign_Button">
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="icon">
+                    <iconset resource="../Icons/Config_Assembly_System.qrc">
+                     <normaloff>:/ui/input.png</normaloff>:/ui/input.png</iconset>
+                   </property>
+                   <property name="iconSize">
+                    <size>
+                     <width>32</width>
+                     <height>32</height>
+                    </size>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QGroupBox" name="Layer_To_Group_AG_List_Container">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                     <horstretch>1</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="title">
+                    <string>Assembly Groups</string>
+                   </property>
+                   <layout class="QVBoxLayout" name="verticalLayout_44">
+                    <property name="spacing">
+                     <number>2</number>
+                    </property>
+                    <property name="leftMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>2</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>2</number>
+                    </property>
+                    <item>
+                     <widget class="BASE_LIST_VIEW" name="Layer_To_Group_AG_List_View">
+                      <property name="selectionMode">
+                       <enum>QAbstractItemView::ExtendedSelection</enum>
+                      </property>
+                      <property name="Root_Index_Assembly_Type" stdset="0">
+                       <string>Groups</string>
+                      </property>
+                      <property name="Data_Model_Name" stdset="0">
+                       <string>config_data_model</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="Assembly_Entity_Creation_Dock">
+   <property name="windowTitle">
+    <string>Assembly Creation</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="Assembly_Creation_Dock_Contents">
+    <layout class="QVBoxLayout" name="verticalLayout_8">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <property name="leftMargin">
+      <number>1</number>
+     </property>
+     <property name="topMargin">
+      <number>1</number>
+     </property>
+     <property name="rightMargin">
+      <number>1</number>
+     </property>
+     <property name="bottomMargin">
+      <number>1</number>
+     </property>
+     <item>
+      <widget class="QComboBox" name="Assembly_Creation_Section_Switch">
+       <item>
+        <property name="text">
+         <string>Assembly Groups</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../Icons/Config_Assembly_System.qrc">
+          <normaloff>:/entity_types/Assembly_Group.png</normaloff>:/entity_types/Assembly_Group.png</iconset>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Assembly Layers</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../Icons/Config_Assembly_System.qrc">
+          <normaloff>:/entity_types/Assembly_Layer.png</normaloff>:/entity_types/Assembly_Layer.png</iconset>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Assembly Models</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../Icons/Config_Assembly_System.qrc">
+          <normaloff>:/entity_types/Assembly_Model.png</normaloff>:/entity_types/Assembly_Model.png</iconset>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QStackedWidget" name="Assembly_Creation_Sections">
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="Assembly_Group_Creation_Page">
+        <layout class="QVBoxLayout" name="verticalLayout_12">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>2</number>
+         </property>
+         <property name="topMargin">
+          <number>2</number>
+         </property>
+         <property name="rightMargin">
+          <number>2</number>
+         </property>
+         <property name="bottomMargin">
+          <number>2</number>
+         </property>
+         <item>
+          <layout class="QHBoxLayout" name="Assembly_Group_Creation_HLayout">
+           <property name="spacing">
+            <number>2</number>
+           </property>
+           <property name="leftMargin">
+            <number>1</number>
+           </property>
+           <property name="topMargin">
+            <number>1</number>
+           </property>
+           <property name="rightMargin">
+            <number>1</number>
+           </property>
+           <property name="bottomMargin">
+            <number>1</number>
+           </property>
+           <item>
+            <widget class="QPushButton" name="Create_Assembly_Group_Button">
+             <property name="text">
+              <string>Create</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="Create_Assembly_Group_Name_Input">
+             <property name="placeholderText">
+              <string>The Name Of The New Assemlby Group</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="Assembly_Group_Editing_HLayout">
+           <property name="spacing">
+            <number>2</number>
+           </property>
+           <property name="leftMargin">
+            <number>1</number>
+           </property>
+           <property name="topMargin">
+            <number>1</number>
+           </property>
+           <property name="rightMargin">
+            <number>1</number>
+           </property>
+           <property name="bottomMargin">
+            <number>1</number>
+           </property>
+           <item>
+            <widget class="QFrame" name="Edit_Assembly_Group_Buttons_Frame">
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_5">
+              <property name="leftMargin">
+               <number>1</number>
+              </property>
+              <property name="topMargin">
+               <number>1</number>
+              </property>
+              <property name="rightMargin">
+               <number>1</number>
+              </property>
+              <property name="bottomMargin">
+               <number>1</number>
+              </property>
+              <item>
+               <widget class="QPushButton" name="Rename_Assembly_Group_Button">
+                <property name="text">
+                 <string>Rename</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="Duplicate_Assembly_Group_Button">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="text">
+                 <string>Duplicate</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="Edit_Assembly_Group_Buttons_VSpacer">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>40</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QPushButton" name="Delete_Assembly_Group_Button">
+                <property name="text">
+                 <string>Delete</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="BASE_LIST_VIEW" name="Created_Assembly_Gorups_List_View">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+               <horstretch>1</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="Root_Index_Assembly_Type" stdset="0">
+              <string>Groups</string>
+             </property>
+             <property name="Data_Model_Name" stdset="0">
+              <string>config_data_model</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="Assembly_Layer_Creation_Page">
+        <layout class="QVBoxLayout" name="verticalLayout_13">
+         <property name="spacing">
+          <number>2</number>
+         </property>
+         <property name="leftMargin">
+          <number>2</number>
+         </property>
+         <property name="topMargin">
+          <number>2</number>
+         </property>
+         <property name="rightMargin">
+          <number>2</number>
+         </property>
+         <property name="bottomMargin">
+          <number>2</number>
+         </property>
+         <item>
+          <layout class="QVBoxLayout" name="Create_Assembly_Layer_VLayout">
+           <item>
+            <widget class="QGroupBox" name="New_Assembly_Layer_Asigned_Group_GroupBox">
+             <property name="title">
+              <string>Assigned Assembly Group</string>
+             </property>
+             <property name="flat">
+              <bool>false</bool>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_9">
+              <property name="sizeConstraint">
+               <enum>QLayout::SetNoConstraint</enum>
+              </property>
+              <property name="leftMargin">
+               <number>1</number>
+              </property>
+              <property name="topMargin">
+               <number>1</number>
+              </property>
+              <property name="rightMargin">
+               <number>1</number>
+              </property>
+              <property name="bottomMargin">
+               <number>1</number>
+              </property>
+              <item>
+               <widget class="QComboBox" name="New_Assembly_Layer_Asigned_Group">
+                <property name="Root_Index_Assembly_Type" stdset="0">
+                 <string>Groups</string>
+                </property>
+                <property name="Data_Model_Name" stdset="0">
+                 <string>config_data_model</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="Create_Assembly_Layer_HLayout">
+             <property name="spacing">
+              <number>2</number>
+             </property>
+             <property name="leftMargin">
+              <number>2</number>
+             </property>
+             <property name="topMargin">
+              <number>2</number>
+             </property>
+             <property name="rightMargin">
+              <number>2</number>
+             </property>
+             <property name="bottomMargin">
+              <number>2</number>
+             </property>
+             <item>
+              <widget class="QPushButton" name="Create_Assembly_Layer_Button">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Create</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="Create_Assembly_Layer_Name_Input">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="placeholderText">
+                <string>The Name Of The New Assembly Layer</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="Edit_Assembly_Layer_HLayout">
+           <property name="spacing">
+            <number>2</number>
+           </property>
+           <property name="leftMargin">
+            <number>2</number>
+           </property>
+           <property name="topMargin">
+            <number>2</number>
+           </property>
+           <property name="rightMargin">
+            <number>2</number>
+           </property>
+           <property name="bottomMargin">
+            <number>2</number>
+           </property>
+           <item>
+            <widget class="QFrame" name="Edit_Assembly_Layer_Buttons_Frame">
+             <property name="frameShape">
+              <enum>QFrame::Box</enum>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_6">
+              <property name="leftMargin">
+               <number>3</number>
+              </property>
+              <property name="topMargin">
+               <number>3</number>
+              </property>
+              <property name="rightMargin">
+               <number>3</number>
+              </property>
+              <property name="bottomMargin">
+               <number>3</number>
+              </property>
+              <item>
+               <widget class="QPushButton" name="Rename_Assembly_Layer_Button">
+                <property name="text">
+                 <string>Rename</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="Duplicate_Assembly_Layer_Button">
+                <property name="text">
+                 <string>Duplicate</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="Edit_Assembly_Layer_Butttons_VSpacer">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>40</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QPushButton" name="Delete_Assembly_Layer_Button">
+                <property name="text">
+                 <string>Delete</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="BASE_LIST_VIEW" name="Created_Assembly_Layers_List_View">
+             <property name="Root_Index_Assembly_Type" stdset="0">
+              <string>Layers</string>
+             </property>
+             <property name="Data_Model_Name" stdset="0">
+              <string>config_data_model</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="Assembly_Model_Creation_Page">
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <property name="spacing">
+          <number>2</number>
+         </property>
+         <property name="leftMargin">
+          <number>2</number>
+         </property>
+         <property name="topMargin">
+          <number>2</number>
+         </property>
+         <property name="rightMargin">
+          <number>2</number>
+         </property>
+         <property name="bottomMargin">
+          <number>2</number>
+         </property>
+         <item>
+          <layout class="QHBoxLayout" name="Assembly_Model_Creation_HLayout">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QPushButton" name="Create_Assembly_Model_Button">
+             <property name="text">
+              <string>Create</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="Create_Assembly_Model_Name_Input">
+             <property name="placeholderText">
+              <string>The Name Of The New Assembly Model</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="Edit_Assembly_Model_Buttons_HLayout">
+           <property name="spacing">
+            <number>2</number>
+           </property>
+           <property name="leftMargin">
+            <number>2</number>
+           </property>
+           <property name="topMargin">
+            <number>2</number>
+           </property>
+           <property name="rightMargin">
+            <number>2</number>
+           </property>
+           <property name="bottomMargin">
+            <number>2</number>
+           </property>
+           <item>
+            <widget class="QFrame" name="Edit_Assembly_Model_Buttons_Frame">
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Plain</enum>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_7">
+              <property name="leftMargin">
+               <number>3</number>
+              </property>
+              <property name="topMargin">
+               <number>3</number>
+              </property>
+              <property name="rightMargin">
+               <number>3</number>
+              </property>
+              <property name="bottomMargin">
+               <number>3</number>
+              </property>
+              <item>
+               <widget class="QPushButton" name="Rename_Assembly_Model_Button">
+                <property name="text">
+                 <string>Rename</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="Duplicate_Assembly_Model_Button">
+                <property name="text">
+                 <string>Duplicate</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="Edit_Assembly_Model_Buttons_VSpacer">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>40</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QPushButton" name="Delete_Assembly_Model_Button">
+                <property name="text">
+                 <string>Delete</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="Created_Assembly_Models_GroupBox">
+             <property name="title">
+              <string>Assembly Models</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_11">
+              <property name="spacing">
+               <number>2</number>
+              </property>
+              <property name="leftMargin">
+               <number>2</number>
+              </property>
+              <property name="topMargin">
+               <number>2</number>
+              </property>
+              <property name="rightMargin">
+               <number>2</number>
+              </property>
+              <property name="bottomMargin">
+               <number>2</number>
+              </property>
+              <item>
+               <widget class="BASE_LIST_VIEW" name="Created_Assembly_Models_List_View">
+                <property name="Root_Index_Assembly_Type" stdset="0">
+                 <string>Models</string>
+                </property>
+                <property name="Data_Model_Name" stdset="0">
+                 <string>config_data_model</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="Created_Assembly_Model_Asigned_Layers_GroupBox">
+             <property name="title">
+              <string>Assembly Layer Assignment</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_10">
+              <property name="spacing">
+               <number>2</number>
+              </property>
+              <property name="leftMargin">
+               <number>2</number>
+              </property>
+              <property name="topMargin">
+               <number>2</number>
+              </property>
+              <property name="rightMargin">
+               <number>2</number>
+              </property>
+              <property name="bottomMargin">
+               <number>2</number>
+              </property>
+              <item>
+               <widget class="BASE_LIST_VIEW" name="Created_Assembly_Model_Asigned_Layers_List_View">
+                <property name="selectionMode">
+                 <enum>QAbstractItemView::ExtendedSelection</enum>
+                </property>
+                <property name="Root_Index_Assembly_Type" stdset="0">
+                 <string>Layers</string>
+                </property>
+                <property name="Data_Model_Name" stdset="0">
+                 <string>config_data_model</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QToolBar" name="toolBar_2">
+   <property name="windowTitle">
+    <string>toolBar_2</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <action name="action_File_Open">
+   <property name="icon">
+    <iconset resource="../Icons/Config_Assembly_System.qrc">
+     <normaloff>:/ui/fileOpen.png</normaloff>:/ui/fileOpen.png</iconset>
+   </property>
+   <property name="text">
+    <string>Open</string>
+   </property>
+  </action>
+  <action name="action_File_Save">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../Icons/Config_Assembly_System.qrc">
+     <normaloff>:/ui/fileSave.png</normaloff>:/ui/fileSave.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save</string>
+   </property>
+  </action>
+  <action name="action_Generate_Display_Layers">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Generate Display Layers</string>
+   </property>
+  </action>
+  <action name="action_Generate_Render_Layers">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Generate Render Layers</string>
+   </property>
+  </action>
+  <action name="action_Create_Assembly_Group">
+   <property name="text">
+    <string>Create Assembly Group</string>
+   </property>
+   <property name="toolTip">
+    <string>Create A New Assembly Group </string>
+   </property>
+  </action>
+  <action name="action_Create_Assembly_Layer">
+   <property name="text">
+    <string>Create Assembly Layer</string>
+   </property>
+  </action>
+  <action name="action_Create_Assembly_Model">
+   <property name="text">
+    <string>Create Assembly Model</string>
+   </property>
+  </action>
+  <action name="action_Toggle_Dock_Viz_AA">
+   <property name="text">
+    <string>Assembly Assignments</string>
+   </property>
+   <property name="toolTip">
+    <string>Show Or Hide The Assembly Assignments Dock</string>
+   </property>
+  </action>
+  <action name="action_Toggle_Dock_Viz_AC">
+   <property name="text">
+    <string>Assembly Creation</string>
+   </property>
+   <property name="toolTip">
+    <string>Show Or Hide The Assembly Creation Dock</string>
+   </property>
+  </action>
+  <action name="action_Assembly_Groups_To_States">
+   <property name="text">
+    <string>Assembly Groups To States</string>
+   </property>
+  </action>
+  <action name="action_Assembly_Groups_To_Part_Sets">
+   <property name="text">
+    <string>Assembly Groups To Part Sets</string>
+   </property>
+  </action>
+  <action name="action_Assign_State_Overides">
+   <property name="text">
+    <string>Assign State Overides</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MAIN_CONFIG_WINDOW</class>
+   <extends>QMainWindow</extends>
+   <header>MAIN_CONFIG_WINDOW.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>BASE_TREE_VIEW</class>
+   <extends>QTreeView</extends>
+   <header>base_tree_view.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ASSIGNMENT_GRID_TABLE_VIEW</class>
+   <extends>QTableView</extends>
+   <header>assignment_grid_table_view.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BASE_LIST_VIEW</class>
+   <extends>QListView</extends>
+   <header>base_list_view.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../Icons/Config_Assembly_System.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>Model_To_Layer_AG_List_View</sender>
+   <signal>clicked(QModelIndex)</signal>
+   <receiver>Model_To_Layer_AL_List_View</receiver>
+   <slot>doItemsLayout()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>118</x>
+     <y>670</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>336</x>
+     <y>678</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Layer_To_Model_AL_List_View</sender>
+   <signal>clicked(QModelIndex)</signal>
+   <receiver>Layer_To_Model_AG_List_View</receiver>
+   <slot>doItemsLayout()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>47</x>
+     <y>598</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>271</x>
+     <y>598</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Model_To_Layer_Assign_Button</sender>
+   <signal>clicked()</signal>
+   <receiver>Assembly_Assignment_Grid_Table_View</receiver>
+   <slot>doItemsLayout()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>110</x>
+     <y>560</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>243</x>
+     <y>278</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Layer_To_Model_Assign_Button</sender>
+   <signal>clicked()</signal>
+   <receiver>Assembly_Assignment_Grid_Table_View</receiver>
+   <slot>doItemsLayout()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>159</x>
+     <y>557</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>153</x>
+     <y>291</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Layer_To_Model_Unassign_Button</sender>
+   <signal>clicked()</signal>
+   <receiver>Assembly_Assignment_Grid_Table_View</receiver>
+   <slot>doItemsLayout()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>300</x>
+     <y>560</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>323</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Model_To_Layer_Unassign_Button</sender>
+   <signal>clicked()</signal>
+   <receiver>Assembly_Assignment_Grid_Table_View</receiver>
+   <slot>doItemsLayout()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>364</x>
+     <y>555</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>377</x>
+     <y>236</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <designerdata>
+  <property name="gridDeltaX">
+   <number>10</number>
+  </property>
+  <property name="gridDeltaY">
+   <number>10</number>
+  </property>
+  <property name="gridSnapX">
+   <bool>true</bool>
+  </property>
+  <property name="gridSnapY">
+   <bool>true</bool>
+  </property>
+  <property name="gridVisible">
+   <bool>true</bool>
+  </property>
+ </designerdata>
+</ui>

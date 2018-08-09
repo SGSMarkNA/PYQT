@@ -1,0 +1,15 @@
+<RCC>
+  <qresource prefix="icons">
+    <file>playClip.png</file>
+    <file>deleteGeneric.png</file>
+    <file>filtersOff.png</file>
+    <file>filtersOn.png</file>
+    <file>menuIconShading.png</file>
+    <file>menuIconShow.png</file>
+    <file>menuIconTexturing.png</file>
+    <file>RS_visible.png</file>
+    <file>selectSimilar.png</file>
+    <file alias="newLayerEmpty">newLayerEmpty.png</file>
+    <file alias="newLayerSelected">newLayerSelected.png</file>
+  </qresource>
+</RCC>

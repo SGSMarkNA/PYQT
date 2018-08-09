@@ -1,0 +1,1 @@
+"C:\Python27\Lib\site-packages\PySide\pyside-rcc.exe" -o "INNERFACE.py" "INNERFACE.qrc"

@@ -1,0 +1,39 @@
+<RCC>
+  <qresource prefix="buttons">
+    <file>fileNew.png</file>
+    <file>fileOpen.png</file>
+    <file>fileSave.png</file>
+    <file>folder-closed.png</file>
+    <file>folder-new.png</file>
+    <file>folder-open.png</file>
+    <file>greenSelect.png</file>
+    <file>info.png</file>
+    <file>MoveLeft.png</file>
+    <file>MoveRight.png</file>
+    <file>Lock_OFF.png</file>
+    <file>Lock_ON.png</file>
+    <file>IconSelect.png</file>
+    <file>nudgeDown.png</file>
+    <file>nudgeLeft.png</file>
+    <file>nudgeRight.png</file>
+    <file>nudgeUp.png</file>
+    <file>zoomIn.png</file>
+    <file>zoomOut.png</file>
+  </qresource>
+  <qresource prefix="lables">
+    <file>dataprep.jpg</file>
+  </qresource>
+  <qresource prefix="tools">
+    <file>polyNormal.png</file>
+    <file>layoutUV.png</file>
+    <file>freeformOff.png</file>
+    <file>freeformOn.png</file>
+    <file>states_manager.png</file>
+    <file>states_viewer.png</file>
+    <file>ZBrush.png</file>
+    <file>ZBrush_large.png</file>
+    <file>polyUnite.png</file>
+    <file>polyPlanProj.png</file>
+    <file>polySeparate.png</file>
+  </qresource>
+</RCC>

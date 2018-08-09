@@ -1,0 +1,607 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Config_Assembly_System</class>
+ <widget class="MAIN_CONFIG_WINDOW" name="Config_Assembly_System">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>886</width>
+    <height>877</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QTabWidget" name="Master_Tab">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="Assembly_Creation_Widget">
+       <attribute name="title">
+        <string>Assembly Creation</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QTabWidget" name="Assembly_Creation_Tab">
+          <property name="currentIndex">
+           <number>2</number>
+          </property>
+          <property name="documentMode">
+           <bool>true</bool>
+          </property>
+          <widget class="QWidget" name="AC_Assembly_Groups_Tab">
+           <attribute name="title">
+            <string>Assembly Groups</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_2">
+            <item row="1" column="0" colspan="2">
+             <widget class="QFrame" name="AC_AG_Edit_Buttons_Frame">
+              <property name="frameShape">
+               <enum>QFrame::StyledPanel</enum>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_4">
+               <property name="leftMargin">
+                <number>3</number>
+               </property>
+               <property name="topMargin">
+                <number>3</number>
+               </property>
+               <property name="rightMargin">
+                <number>3</number>
+               </property>
+               <property name="bottomMargin">
+                <number>3</number>
+               </property>
+               <item>
+                <widget class="QPushButton" name="AC_AG_Rename_Button">
+                 <property name="text">
+                  <string>Rename</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="AC_AG_Duplicate_Button">
+                 <property name="text">
+                  <string>Duplicate</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="AC_AG_Edit_Butttons_verticalSpacer">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="QPushButton" name="AC_AG_Delete_Btton">
+                 <property name="text">
+                  <string>Delete</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QListView" name="AC_Assembly_Groups_List_View">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                <horstretch>1</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2">
+             <widget class="QLineEdit" name="AC_AG_Create_Name_Input"/>
+            </item>
+            <item row="0" column="0" colspan="2">
+             <widget class="QPushButton" name="AC_AG_Create_Button">
+              <property name="text">
+               <string>Create</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="AC_Assembly_Layers_Tab">
+           <attribute name="title">
+            <string>Assembly Layers</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_3">
+            <item row="2" column="0">
+             <widget class="QFrame" name="AC_AL_Edit_Buttons_Frame">
+              <property name="frameShape">
+               <enum>QFrame::StyledPanel</enum>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_6">
+               <property name="leftMargin">
+                <number>3</number>
+               </property>
+               <property name="topMargin">
+                <number>3</number>
+               </property>
+               <property name="rightMargin">
+                <number>3</number>
+               </property>
+               <property name="bottomMargin">
+                <number>3</number>
+               </property>
+               <item>
+                <widget class="QPushButton" name="AC_AL_Rename_Button">
+                 <property name="text">
+                  <string>Rename</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="AC_AL_Duplicate_Button">
+                 <property name="text">
+                  <string>Duplicate</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="AC_AL_Edit_Butttons_verticalSpacer">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="QPushButton" name="AC_AL_Delete_Btton">
+                 <property name="text">
+                  <string>Delete</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="2" column="1" colspan="3">
+             <widget class="QListView" name="AC_Assembly_Layers_List_View"/>
+            </item>
+            <item row="1" column="3">
+             <widget class="QLineEdit" name="AC_AL_Create_Name_Input"/>
+            </item>
+            <item row="1" column="0">
+             <widget class="QPushButton" name="AC_AL_Create_Button">
+              <property name="text">
+               <string>Create</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1" rowspan="2" colspan="2">
+             <widget class="QGroupBox" name="AC_AL_Asigned_AG_GroupBox">
+              <property name="title">
+               <string>Assigned Assembly Group</string>
+              </property>
+              <property name="flat">
+               <bool>true</bool>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_9">
+               <property name="leftMargin">
+                <number>1</number>
+               </property>
+               <property name="topMargin">
+                <number>1</number>
+               </property>
+               <property name="rightMargin">
+                <number>1</number>
+               </property>
+               <property name="bottomMargin">
+                <number>1</number>
+               </property>
+               <item>
+                <widget class="QComboBox" name="AC_AL_Asigned_AG"/>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="AC_Assembly_Models_Tab">
+           <attribute name="title">
+            <string>Assembly Models</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_5">
+            <item row="0" column="0">
+             <widget class="QGroupBox" name="AC_AM_GroupBox">
+              <property name="title">
+               <string>Assembly Models</string>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_4">
+               <item row="0" column="0">
+                <widget class="QPushButton" name="AC_AM_Create_Button">
+                 <property name="text">
+                  <string>Create</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QLineEdit" name="AC_AM_Create_Name_Input"/>
+               </item>
+               <item row="1" column="0">
+                <widget class="QFrame" name="AC_AM_Edit_Buttons_Frame">
+                 <property name="frameShape">
+                  <enum>QFrame::StyledPanel</enum>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Plain</enum>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_7">
+                  <property name="leftMargin">
+                   <number>3</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>3</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>3</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>3</number>
+                  </property>
+                  <item>
+                   <widget class="QPushButton" name="AC_AM_Rename_Button">
+                    <property name="text">
+                     <string>Rename</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="AC_AM_Duplicate_Button">
+                    <property name="text">
+                     <string>Duplicate</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <spacer name="AC_AM_Edit_Butttons_verticalSpacer">
+                    <property name="orientation">
+                     <enum>Qt::Vertical</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>20</width>
+                      <height>40</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="AC_AM_Delete_Button">
+                    <property name="text">
+                     <string>Delete</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QListView" name="AC_Assembly_Models_List_View"/>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QGroupBox" name="AC_AM_Asigned_AL_GroupBox">
+              <property name="title">
+               <string>Assembly Layer Assignment</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_10">
+               <item>
+                <widget class="QListView" name="AC_AM_Asigned_AL_List_View"/>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="Assembly_Assinments_Widget">
+       <attribute name="title">
+        <string>Assembly Assinements</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_14">
+        <item>
+         <widget class="QTabWidget" name="Assembly_Assinments_Tab">
+          <property name="currentIndex">
+           <number>2</number>
+          </property>
+          <widget class="QWidget" name="AA_Model_Centeric_Tab">
+           <attribute name="title">
+            <string>Model Centeric Assinments</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_18">
+            <item>
+             <widget class="QSplitter" name="AA_MC_splitter">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <widget class="QGroupBox" name="AA_MC_AM_GroupBox">
+               <property name="title">
+                <string>Assembly Models</string>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_16">
+                <item>
+                 <widget class="QListView" name="AA_MC_Assembly_Models_List_View"/>
+                </item>
+               </layout>
+              </widget>
+              <widget class="QFrame" name="AA_MC_Assinment_Buttons_Frame">
+               <property name="frameShape">
+                <enum>QFrame::StyledPanel</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_17">
+                <item>
+                 <spacer name="AA_MC_Assinment_Buttons_Upper_verticalSpacer">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="AA_MC_Assign_Button">
+                  <property name="text">
+                   <string>Assign</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="AA_MC_Unassign_Button">
+                  <property name="text">
+                   <string>Unassign</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="AA_MC_Assinment_Buttons_Lower_verticalSpacer">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </widget>
+              <widget class="QGroupBox" name="AA_MC_AL_GroupBox">
+               <property name="title">
+                <string>Assembly Layers</string>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_15">
+                <item>
+                 <widget class="QListView" name="AA_MC_Assembly_Layers_List_View"/>
+                </item>
+               </layout>
+              </widget>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="AA_Layer_Centeric_Tab">
+           <attribute name="title">
+            <string>Layer Centeric Assinments</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_22">
+            <item>
+             <widget class="QSplitter" name="AA_LC_splitter">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <widget class="QGroupBox" name="AA_LC_AL_GroupBox">
+               <property name="title">
+                <string>Assembly Layers</string>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_19">
+                <item>
+                 <widget class="QListView" name="AA_LC_Assembly_Layers_List_View"/>
+                </item>
+               </layout>
+              </widget>
+              <widget class="QFrame" name="AA_LC_Assinment_Buttons_Frame">
+               <property name="frameShape">
+                <enum>QFrame::StyledPanel</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_20">
+                <item>
+                 <spacer name="AA_LC_Assinment_Buttons_Upper_verticalSpacer">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="AA_LC_Assign_Button">
+                  <property name="text">
+                   <string>Assign</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="AA_LC_Unassign_Button">
+                  <property name="text">
+                   <string>Unassign</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="AA_LC_Assinment_Buttons_Lower_verticalSpacer">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </widget>
+              <widget class="QGroupBox" name="AA_LC_AM_GroupBox">
+               <property name="title">
+                <string>Assembly Models</string>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_21">
+                <item>
+                 <widget class="QListView" name="AA_LC_Assembly_Models_List_View"/>
+                </item>
+               </layout>
+              </widget>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="AA_Table_Centeric_Tab">
+           <attribute name="title">
+            <string>Table Centeric Assinments</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout">
+            <item row="0" column="0">
+             <widget class="QTableWidget" name="AA_TC_Table_Widget"/>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>886</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionOpen"/>
+    <addaction name="actionSave"/>
+   </widget>
+   <widget class="QMenu" name="menuMaya">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="title">
+     <string>Maya</string>
+    </property>
+    <addaction name="action_Generate_Display_Layers"/>
+    <addaction name="action_Generate_Render_Layers"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuMaya"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionOpen">
+   <property name="text">
+    <string>Open</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Save</string>
+   </property>
+  </action>
+  <action name="action_Generate_Display_Layers">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Generate Display Layers</string>
+   </property>
+  </action>
+  <action name="action_Generate_Render_Layers">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Generate Render Layers</string>
+   </property>
+  </action>
+  <action name="action_Create_Assembly_Group">
+   <property name="text">
+    <string>Create Assembly Group</string>
+   </property>
+   <property name="toolTip">
+    <string>Create A New Assembly Group </string>
+   </property>
+  </action>
+  <action name="action_Create_Assembly_Layer">
+   <property name="text">
+    <string>Create Assembly Layer</string>
+   </property>
+  </action>
+  <action name="action_Create_Assembly_Model">
+   <property name="text">
+    <string>Create Assembly Model</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MAIN_CONFIG_WINDOW</class>
+   <extends>QMainWindow</extends>
+   <header>MAIN_CONFIG_WINDOW.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
