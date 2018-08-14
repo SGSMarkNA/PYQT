@@ -8,7 +8,7 @@
 # WARNING! All changes made in this file will be lost!
 
 try:
-    from PySide import QtCore
+    from PYQT import QtCore
 except:
     from PySide2 import QtCore
 

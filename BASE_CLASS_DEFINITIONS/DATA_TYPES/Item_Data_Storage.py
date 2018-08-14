@@ -1,10 +1,12 @@
 import os
 import PYQT
+import PYQT.BASE_CLASS_DEFINITIONS.QT_SUBCLASS.QItemDelegate
 Constants = PYQT.Constants
 from ..Item_Data_Roles import Base_Item_Data_Roles
 
 if False:
 	from .. import DATA_TYPES
+
 #----------------------------------------------------------------------
 def is_Convertable_To_QColor(val):
 	""""""
@@ -80,6 +82,99 @@ class DATA_DEFAULT_VALUES:
 	font.setWeight(FONT.weight)
 	icon             = None
 
+
+
+########################################################################
+class Item_Data_Editor(object):
+	#----------------------------------------------------------------------
+	def __init__(self,item_data):
+		""""""
+		isinstance(item_data,Standered_Item_Data)
+		self.item_data = item_data
+		self._editor = None
+	#----------------------------------------------------------------------
+	@property
+	def has_editor(self):
+		""""""
+		return self.createEditor() != None
+	#----------------------------------------------------------------------
+	def createEditor(self,parent=None):
+		""""""
+		return None
+	#----------------------------------------------------------------------
+	def setEditorData(self):
+		""""""
+		pass
+	#----------------------------------------------------------------------
+	def setModelData(self):
+		""""""
+		pass
+	
+########################################################################
+class Spin_Box_Data_Editor(Item_Data_Editor):
+	#----------------------------------------------------------------------
+	def __init__(self,item_data):
+		""""""
+		super(Spin_Box_Data_Editor,self).__init__(item_data)
+	#----------------------------------------------------------------------
+	def createEditor(self,parent=None,index=None):
+		""""""
+		self._editor = PYQT.QSpinBox(parent=parent)
+		return self._editor
+	#----------------------------------------------------------------------
+	def setEditorData(self):
+		""""""
+		self._editor.setValue(int(self.item_data.display_name))
+	#----------------------------------------------------------------------
+	def setModelData(self):
+		""""""
+		self.item_data.display_name = self._editor.value()
+		
+########################################################################
+class Combo_Box_Data_Editor(Item_Data_Editor):
+	#----------------------------------------------------------------------
+	def __init__(self,item_data):
+		""""""
+		super(Combo_Box_Data_Editor,self).__init__(item_data)
+	#----------------------------------------------------------------------
+	def createEditor(self,parent=None):
+		""""""
+		self._editor = PYQT.QComboBox(parent=parent)
+		return self._editor
+	#----------------------------------------------------------------------
+	def setEditorData(self):
+		""""""
+		self._editor.addItems(["New Name One","New Name 2",self.item_data.display_name])
+		self._editor.setCurrentIndex(self._editor.findText(self.item_data.display_name))
+	#----------------------------------------------------------------------
+	def setModelData(self):
+		""""""
+		self.item_data.display_name = self._editor.currentText()
+		
+########################################################################
+class Item_Data_Delegate(PYQT.QItemDelegate):
+	#----------------------------------------------------------------------
+	def createEditor(self, parent, option, index):
+		editor = index.data(Base_Item_Data_Roles.INTERNAL_EDITOR)
+		if not editor == None:
+			return editor.createEditor(parent=parent,index=index)
+		else:
+			return super(Item_Data_Delegate,self).createEditor(parent, option, index)
+	#----------------------------------------------------------------------
+	def setEditorData(self, editor, index):
+		editor = index.data(Base_Item_Data_Roles.INTERNAL_EDITOR)
+		if not editor == None:
+			return editor.setEditorData()
+		else:
+			return super(Item_Data_Delegate,self).setEditorData(editor, index)
+	#----------------------------------------------------------------------
+	def setModelData(self, spinBox, model, index):
+		editor = index.data(Base_Item_Data_Roles.INTERNAL_EDITOR)
+		if not editor == None:
+			return editor.setModelData()
+		else:
+			return super(Item_Data_Delegate,self).setEditorData(editor, index)
+
 ########################################################################
 class Standered_Item_Data(object):
 	"""This Is The Base Item Data Class It Only Stores Data That Is Needed To Display Itself"""
@@ -92,7 +187,7 @@ class Standered_Item_Data(object):
 	def __init__(self,
 	             tree_item            = None,
 	             selectable           = None, enabled             = None, editable     = None,
-	             dragable             = None, dropable            = None, checkable    = None,
+	             dragable             = None, dropable            = None, checkable    = None, checked = False,
 	             tristate             = None, font_family         = None, font_size    = None,
 	             size_hint            = None, status_tip          = None, tool_tip     = None,
 	             brush                = None, icon_visable        = None, icon_color   = None,
@@ -110,7 +205,10 @@ class Standered_Item_Data(object):
 		self._item_editable             = editable
 		self._item_dragable             = dragable
 		self._item_dropable             = dropable
-		self._item_checkable            = checkable
+		if checkable:
+			self._item_checkable        = checkable
+		else:
+			self._item_checkable        = False
 		self._item_tristate             = tristate
 		self._item_display_name         = display_name
 		self._item_font_family          = font_family
@@ -129,13 +227,17 @@ class Standered_Item_Data(object):
 		self._item_vertical_alignment   = self.V_ALIGNMENT.Values.get(vertical_alignment,None)
 		self._data_icon                 = None #create_Item_Icon(":/outliner/group")
 		self._data_font                 = None
-		self._data_checked              = PYQT.Qt.CheckState.Unchecked
+		if checked:
+			self._data_checked              = PYQT.Qt.CheckState.Checked
+		else:
+			self._data_checked              = PYQT.Qt.CheckState.Unchecked
 		self._data_foreground_color     = None
 		self._data_background_color     = None
 		self._data_alignment            = None
 		self._data_flags                = PYQT.Qt.ItemFlags()
 		self._update_flags()
 		self._update_text_alignment()
+		self._internal_editor = None
 		if False:
 			isinstance(self.background_color,PYQT.QColor)
 			isinstance(self.foreground_color,PYQT.QColor)
@@ -143,11 +245,22 @@ class Standered_Item_Data(object):
 			isinstance(self.size_hint,PYQT.QSize)
 			isinstance(self.status_tip,str)
 			isinstance(self.tool_tip,str) 
-			isinstance(self.text_font,PYQT.QFont)   
+			isinstance(self.text_font,PYQT.QFont)
 	#----------------------------------------------------------------------
-	def create_editor(self, parent=None):
-		editor = PYQT.QLineEdit(parent)
-		return editor
+	@property
+	def has_editor(self):
+		""""""
+		return self._internal_editor is not None
+	#----------------------------------------------------------------------
+	@property
+	def internal_editor(self):
+		""""""
+		return self._internal_editor
+	#----------------------------------------------------------------------
+	@internal_editor.setter
+	def internal_editor(self,editor):
+		""""""
+		self._internal_editor = editor
 	#----------------------------------------------------------------------
 	def createColorIcon(self, color):
 		if isinstance(color, str):
@@ -407,13 +520,10 @@ class Standered_Item_Data(object):
 	#----------------------------------------------------------------------
 	@property
 	def checked(self):
-		if self._item_checkable is None or not self._item_checkable:
-			return None
+		if self._item_checkable:
+			return self._data_checked
 		else:
-			if self._data_checked == PYQT.Qt.CheckState.Checked:
-				return self._data_checked
-			else:
-				return None
+			return None
 	#----------------------------------------------------------------------
 	@checked.setter
 	def checked(self, value):
@@ -519,7 +629,7 @@ class Standered_Item_Data(object):
 	#----------------------------------------------------------------------
 	@display_name.setter
 	def display_name(self, value):
-		if not isinstance(value,(str, unicode)):
+		if not isinstance(value,(str, unicode, bool, int)):
 			raise ValueError("input value must be an instance of (str,unicode) and a %r was given" % type(value))
 		self._item_display_name = value
 	#----------------------------------------------------------------------
@@ -683,10 +793,14 @@ class Standered_Item_Data(object):
 			return self.vertical_alignment
 		elif role == Base_Item_Data_Roles.CHECKSTATE:
 			return self.checked
+		elif role == Base_Item_Data_Roles.CHECKABLE:
+			return self.checkable
 		elif role == Base_Item_Data_Roles.USER:
 			return self
 		elif role == Base_Item_Data_Roles.TREE_OBJECT:
 			return self.tree_item
+		elif role == Base_Item_Data_Roles.INTERNAL_EDITOR:
+			return self.internal_editor
 		return None
 	#----------------------------------------------------------------------
 	def setData(self, role, value):
@@ -779,7 +893,7 @@ class Internal_Item_Data(Standered_Item_Data):
 	def __init__(self,
 	             tree_item            = None,
 	             selectable           = None, enabled             = None, editable     = None,
-	             dragable             = None, dropable            = None, checkable    = None,
+	             dragable             = None, dropable            = None, checkable    = None, checked = False,
 	             tristate             = None, font_family         = None, font_size    = None,
 	             size_hint            = None, status_tip          = None, tool_tip     = None,
 	             brush                = None, icon_visable        = None, icon_color   = None,
@@ -790,7 +904,7 @@ class Internal_Item_Data(Standered_Item_Data):
 		""" """
 		super(Internal_Item_Data, self).__init__(tree_item,
 		                                selectable           = selectable          , enabled             = enabled            , editable     = editable,
-		                                dragable             = dragable            , dropable            = dropable           , checkable    = checkable,
+		                                dragable             = dragable            , dropable            = dropable           , checkable    = checkable, checked=checked,
 		                                tristate             = tristate            , font_family         = font_family        , font_size    = font_size,
 		                                size_hint            = size_hint           , status_tip          = status_tip         , tool_tip     = tool_tip,
 		                                brush                = brush               , icon_visable        = icon_visable       , icon_color   = icon_color,

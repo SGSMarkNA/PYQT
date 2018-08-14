@@ -557,17 +557,6 @@ class Base_Tree_View(PYQT.QTreeView):
 		res = super(Base_Tree_View,self).sortByColumn(column,order)
 		return res
 	#----------------------------------------------------------------------
-	def visualIndex(self,index):
-		"""
-		visualIndex(index)
-			index=QT.QModelIndex
-
-
-		"""
-		res = super(Base_Tree_View,self).visualIndex(index)
-
-		return res
-	#----------------------------------------------------------------------
 	def alternatingRowColors(self):
 		"""
 		This property holds whether to draw the background using alternating colors.

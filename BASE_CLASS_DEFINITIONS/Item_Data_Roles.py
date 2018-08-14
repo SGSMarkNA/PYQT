@@ -21,3 +21,4 @@ class Base_Item_Data_Roles(Constants.ItemDataRole):
 	VERTICAL_ALIGNMENT   = userRole_generator()
 	INTERNAL_DATA        = userRole_generator()
 	TREE_OBJECT          = userRole_generator()
+	INTERNAL_EDITOR      = userRole_generator()

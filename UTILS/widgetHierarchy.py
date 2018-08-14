@@ -8,17 +8,7 @@
 """
 Widget Hierarchy
 """
-
-try:
-  from PySide2.QtCore import * 
-  from PySide2.QtGui import * 
-  from PySide2.QtWidgets import *
-  from shiboken2 import wrapInstance 
-except ImportError:
-  from PySide.QtCore import * 
-  from PySide.QtGui import * 
-  from shiboken import wrapInstance 
-
+from PYQT import *
 from maya import OpenMayaUI as omui 
 from maya.app.general.mayaMixin import MayaQWidgetBaseMixin
 from pprint import pprint
@@ -57,11 +47,8 @@ class WidgetHierarchyTree(MayaQWidgetBaseMixin, QTreeView):
     def populateModel_recurseChildren(self, parentItem, widget):
         # Construct the item data and append the row
         classNameStr = str(widget.__class__).split("'")[1]
-#ifdef MAYA_WANT_PYSIDE2
         classNameStr = classNameStr.replace('PySide2.','').replace('QtGui.', '').replace('QtCore.', '').replace('QtWidgets.', '')
-#else
         classNameStr = classNameStr.replace('PySide.','').replace('QtGui.', '').replace('QtCore.', '')
-#endif
         items = [QStandardItem(classNameStr), 
                  QStandardItem(widget.objectName()),
                  QStandardItem(str(len(widget.children()))),
