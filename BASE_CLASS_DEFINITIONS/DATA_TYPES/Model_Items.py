@@ -24,7 +24,7 @@ class Base_Model_Item(object):
 			for i, column_item in enumerate(items):
 				if isinstance(column_item, dict ):
 					column_item = Item_Data_Storage.Internal_Item_Data(self, **column_item)
-				elif isinstance(column_item, Item_Data_Storage.Internal_Item_Data ):
+				elif hasattr(column_item, "tree_item" ):
 					column_item.tree_item = self
 				else:
 					raise ValueError("index %i in child_items arg must be a instance of Tree_Item and a %r was found" % (i, type(child_item)) )
@@ -381,7 +381,7 @@ class Root_Model_Item(Base_Model_Item):
 		if len(headers):
 			for header in headers:
 				if isinstance(header, str):
-					item = Item_Data_Storage.Internal_Item_Data( self, display_name=header)
+					item = Item_Data_Storage.Internal_Item_Data( tree_item=self, display_name=header)
 				elif isinstance(header, dict):
 					header["tree_item"] = self
 					item = Item_Data_Storage.Internal_Item_Data(**header)

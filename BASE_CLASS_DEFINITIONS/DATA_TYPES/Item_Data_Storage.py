@@ -1,9 +1,9 @@
 import os
 import PYQT
-import PYQT.BASE_CLASS_DEFINITIONS.QT_SUBCLASS.QItemDelegate
+import PYQT.BASE_CLASS_DEFINITIONS
 Constants = PYQT.Constants
 from ..Item_Data_Roles import Base_Item_Data_Roles
-
+from ..QT_SUBCLASS import QComboBox,QItemDelegate
 if False:
 	from .. import DATA_TYPES
 
@@ -82,21 +82,66 @@ class DATA_DEFAULT_VALUES:
 	font.setWeight(FONT.weight)
 	icon             = None
 
-
+########################################################################
+class Item_Data_Delegate(PYQT.QItemDelegate):
+	#----------------------------------------------------------------------
+	def createEditor(self, parent, option, index):
+		editor = index.data(Base_Item_Data_Roles.INTERNAL_EDITOR)
+		if not editor == None:
+			return editor.createEditor(parent=parent,index=index)
+		else:
+			return super(Item_Data_Delegate,self).createEditor(parent, option, index)
+	#----------------------------------------------------------------------
+	def setEditorData(self, editor, index):
+		item_editor = index.data(Base_Item_Data_Roles.INTERNAL_EDITOR)
+		if not item_editor == None:
+			return item_editor.setEditorData()
+		else:
+			return super(Item_Data_Delegate,self).setEditorData(editor, index)
+	#----------------------------------------------------------------------
+	def setModelData(self, editor, model, index):
+		item_editor = index.data(Base_Item_Data_Roles.INTERNAL_EDITOR)
+		if not item_editor == None:
+			return item_editor.setModelData()
+		else:
+			return super(Item_Data_Delegate,self).setModelData(editor, model, index)
+	#----------------------------------------------------------------------
+	def paint(self, painter, option, index):
+		isinstance(painter,PYQT.QPainter)
+		isinstance(option,PYQT.QStyleOptionViewItem)
+		isinstance(index,PYQT.QModelIndex)
+		super(Item_Data_Delegate, self).paint(painter, option, index)
+	#----------------------------------------------------------------------
+	def drawDisplay(self, painter, option, rect, text):
+		isinstance(painter,PYQT.QPainter)
+		isinstance(option,PYQT.QStyleOptionViewItem)
+		isinstance(rect,PYQT.QRect)
+		super(Item_Data_Delegate, self).drawDisplay(painter, option, rect, text)
+	#----------------------------------------------------------------------
+	def drawFocus(self, painter, option, rect):
+		""""""
+		isinstance(painter, PYQT.QPainter)
+		isinstance(option,PYQT.QStyleOptionViewItem)
+		isinstance(rect, PYQT.QRect)
+		super(Item_Data_Delegate, self).drawFocus(painter, option, rect)
+	#----------------------------------------------------------------------
+	def drawBackground (self, painter, option, index):
+		isinstance(painter,PYQT.QPainter)
+		isinstance(option,PYQT.QStyleOptionViewItem)
+		isinstance(index,PYQT.QModelIndex)
+		super(Item_Data_Delegate, self).drawBackground(painter, option, rect)
 
 ########################################################################
 class Item_Data_Editor(object):
 	#----------------------------------------------------------------------
-	def __init__(self,item_data):
+	def __init__(self,editor_data):
 		""""""
-		isinstance(item_data,Standered_Item_Data)
-		self.item_data = item_data
-		self._editor = None
+		self._editor_data = editor_data
 	#----------------------------------------------------------------------
 	@property
 	def has_editor(self):
 		""""""
-		return self.createEditor() != None
+		return self._editor != None
 	#----------------------------------------------------------------------
 	def createEditor(self,parent=None):
 		""""""
@@ -109,6 +154,61 @@ class Item_Data_Editor(object):
 	def setModelData(self):
 		""""""
 		pass
+
+########################################################################
+class Item_Data_Delegate(PYQT.QItemDelegate):
+	#----------------------------------------------------------------------
+	def createEditor(self, parent, option, index):
+		self.temp_internal_editor = index.data(Base_Item_Data_Roles.INTERNAL_EDITOR)
+		if not self.temp_internal_editor == None:
+			return self.temp_internal_editor.createEditor(parent=parent,index=index)
+		else:
+			return super(Item_Data_Delegate,self).createEditor(parent, option, index)
+	#----------------------------------------------------------------------
+	def setEditorData(self, editor, index):
+		if not self.temp_internal_editor == None:
+			return self.temp_internal_editor.setEditorData()
+		else:
+			return super(Item_Data_Delegate,self).setEditorData(editor, index)
+	#----------------------------------------------------------------------
+	def closeEditor(self,editor,hint=PYQT.QAbstractItemDelegate.EndEditHint):
+		""""""
+		super(Item_Data_Delegate,self).closeEditor(editor,hint)
+		if not self.temp_internal_editor == None:
+			self.temp_internal_editor = None
+	#----------------------------------------------------------------------
+	def setModelData(self, editor, model, index):
+		item_editor = index.data(Base_Item_Data_Roles.INTERNAL_EDITOR)
+		if not item_editor == None:
+			return item_editor.setModelData()
+		else:
+			return super(Item_Data_Delegate,self).setModelData(editor, model, index)
+	#----------------------------------------------------------------------
+	def paint(self, painter, option, index):
+		isinstance(painter,PYQT.QPainter)
+		isinstance(option,PYQT.QStyleOptionViewItem)
+		isinstance(index,PYQT.QModelIndex)
+		super(Item_Data_Delegate, self).paint(painter, option, index)
+	#----------------------------------------------------------------------
+	def drawDisplay(self, painter, option, rect, text):
+		isinstance(painter,PYQT.QPainter)
+		isinstance(option,PYQT.QStyleOptionViewItem)
+		isinstance(rect,PYQT.QRect)
+		super(Item_Data_Delegate, self).drawDisplay(painter, option, rect, text)
+	#----------------------------------------------------------------------
+	def drawFocus(self, painter, option, rect):
+		""""""
+		isinstance(painter, PYQT.QPainter)
+		isinstance(option,PYQT.QStyleOptionViewItem)
+		isinstance(rect, PYQT.QRect)
+		super(Item_Data_Delegate, self).drawFocus(painter, option, rect)
+	#----------------------------------------------------------------------
+	def drawBackground (self, painter, option, index):
+		isinstance(painter,PYQT.QPainter)
+		isinstance(option,PYQT.QStyleOptionViewItem)
+		isinstance(index,PYQT.QModelIndex)
+		super(Item_Data_Delegate, self).drawBackground(painter, option, rect)
+
 	
 ########################################################################
 class Spin_Box_Data_Editor(Item_Data_Editor):
@@ -124,11 +224,11 @@ class Spin_Box_Data_Editor(Item_Data_Editor):
 	#----------------------------------------------------------------------
 	def setEditorData(self):
 		""""""
-		self._editor.setValue(int(self.item_data.display_name))
+		self._editor.setValue(int(self._editor_data.display_name))
 	#----------------------------------------------------------------------
 	def setModelData(self):
 		""""""
-		self.item_data.display_name = self._editor.value()
+		self._editor_data.display_name = self._editor.value()
 		
 ########################################################################
 class Combo_Box_Data_Editor(Item_Data_Editor):
@@ -137,7 +237,7 @@ class Combo_Box_Data_Editor(Item_Data_Editor):
 		""""""
 		super(Combo_Box_Data_Editor,self).__init__(item_data)
 	#----------------------------------------------------------------------
-	def createEditor(self,parent=None):
+	def createEditor(self,parent=None,index=None):
 		""""""
 		self._editor = PYQT.QComboBox(parent=parent)
 		return self._editor
@@ -150,117 +250,167 @@ class Combo_Box_Data_Editor(Item_Data_Editor):
 	def setModelData(self):
 		""""""
 		self.item_data.display_name = self._editor.currentText()
+
+########################################################################
+class _AUTO_PROPERTIES_METACLASS(type):
+	""""""
+	#----------------------------------------------------------------------
+	def __new__(mcs, name, bases, attdict):
+		"""This Is Run Before The Class Is Created. Not An Instance Of The Class But The Creation Of The Class Itself"""
+		# Check If The Class Has Been Assigned An Id Number
+		# If Not Generate One And Add It The Dict Of Items That Represent The Class Attributes
+		# Generate The New Class Type And Return It
+		fn_get_prefix = "_fn_get_"
+		fn_set_prefix = "_fn_set_"
+		fn_end_prefix = "_value"
+		fn_get_expr = fn_get_prefix + "{}" + fn_end_prefix
+		fn_set_expr = fn_set_prefix + "{}" + fn_end_prefix
 		
-########################################################################
-class Item_Data_Delegate(PYQT.QItemDelegate):
+		def find_base_class_fset(prop_name,bases):
+			"""Finds The Setter Function Within All The Base Clases Recursivly"""
+			fn_name = fn_set_expr.format(prop_name)
+			for base in bases:
+				if hasattr(base,fn_name):
+					return getattr(base,fn_name)
+				else:
+					return find_base_class_fget(prop_name, [b for b in base.__bases__ if not type(b) == type])
+		def find_base_class_fget(prop_name,bases):
+			"""Finds The getter Function Within All The Base Clases Recursivly"""
+			fn_name = fn_get_expr.format(prop_name)
+			for base in bases:
+				if hasattr(base,fn_name):
+					return getattr(base,fn_name)
+				else:
+					return find_base_class_fget(prop_name, [b for b in base.__bases__ if not type(b) == type])
+		def get_prop_name(fn_name):
+			return key.replace(fn_get_prefix,"").replace(fn_set_prefix,"").replace(fn_end_prefix,"")
+			
+		collection = dict()
+		for key in attdict.keys():
+			if key.startswith(fn_get_prefix) or key.startswith(fn_set_prefix):
+				if key.endswith(fn_end_prefix):
+					prop_name = get_prop_name(key)
+					collection[prop_name] = dict()
+		
+		for prop_name,prop_data in collection.iteritems():
+			get_fn = fn_get_expr.format(prop_name)
+			set_fn = fn_set_expr.format(prop_name)
+			
+			if get_fn in attdict:
+				prop_data["fget"] = attdict[get_fn]
+			else:
+				prop_data["fget"] = find_base_class_fget(prop_name, bases)
+				
+			if set_fn in attdict:
+				prop_data["fset"] = attdict[set_fn]
+			else:
+				prop_data["fset"] = find_base_class_fset(prop_name, bases)
+			attdict[prop_name]=property(**prop_data)
+			
+		res = type.__new__(mcs, name, bases, attdict)
+		return res
+
 	#----------------------------------------------------------------------
-	def createEditor(self, parent, option, index):
-		editor = index.data(Base_Item_Data_Roles.INTERNAL_EDITOR)
-		if not editor == None:
-			return editor.createEditor(parent=parent,index=index)
-		else:
-			return super(Item_Data_Delegate,self).createEditor(parent, option, index)
+	def __init__(cls, name, bases, dct):
+		return super(_AUTO_PROPERTIES_METACLASS, cls).__init__(name, bases, dct)
+
 	#----------------------------------------------------------------------
-	def setEditorData(self, editor, index):
-		editor = index.data(Base_Item_Data_Roles.INTERNAL_EDITOR)
-		if not editor == None:
-			return editor.setEditorData()
-		else:
-			return super(Item_Data_Delegate,self).setEditorData(editor, index)
-	#----------------------------------------------------------------------
-	def setModelData(self, spinBox, model, index):
-		editor = index.data(Base_Item_Data_Roles.INTERNAL_EDITOR)
-		if not editor == None:
-			return editor.setModelData()
-		else:
-			return super(Item_Data_Delegate,self).setEditorData(editor, index)
+	def __call__(cls,*args,**kwargs):
+		"""This Is Run Before An Instance Of The Class Created And Allows For The Inspection And Manipulation Of The Values Used To Create The New Instance"""
+		# Create The New Class Instance
+		
+		res = type.__call__(cls,*args,**kwargs)
+		return res
+
+# ======================================================================
+# DATA MODEL STANDERD ITEM CONTAINERS
+# ----------------------------------------------------------------------
+# Synopsis:
+#     Like A StanderedItem
+# ======================================================================
 
 ########################################################################
-class Standered_Item_Data(object):
-	"""This Is The Base Item Data Class It Only Stores Data That Is Needed To Display Itself"""
-	DEF_VALS    = DATA_DEFAULT_VALUES
-	H_ALIGNMENT = Constants.AlignmentFlag.Horizontal
-	V_ALIGNMENT = Constants.AlignmentFlag.Vertical
-	ID_ROLE     = Base_Item_Data_Roles
+class Standered_Item(object):
+	"""
+	Class Info:
+	===============
+	| This Is The Base Class For Item Data
+	| It Stores Data That It Needs To Display Itself
+	"""
+	__metaclass__ = _AUTO_PROPERTIES_METACLASS
+	DEF_VALS      = DATA_DEFAULT_VALUES
+	H_ALIGNMENT   = Constants.AlignmentFlag.Horizontal
+	V_ALIGNMENT   = Constants.AlignmentFlag.Vertical
+	ID_ROLE       = Base_Item_Data_Roles
 
 	#----------------------------------------------------------------------
-	def __init__(self,
-	             tree_item            = None,
-	             selectable           = None, enabled             = None, editable     = None,
-	             dragable             = None, dropable            = None, checkable    = None, checked = False,
-	             tristate             = None, font_family         = None, font_size    = None,
-	             size_hint            = None, status_tip          = None, tool_tip     = None,
-	             brush                = None, icon_visable        = None, icon_color   = None,
-	             font_weight          = None, font_capitalization = None, display_name = None,
-	             background_color     = None, foreground_color    = None,
-	             horizontal_alignment = None, vertical_alignment  = None):
-		""""""
-		if False:
-			isinstance(tree_item, DATA_TYPES.Model_Items.Base_Model_Item)
+	def __init__(self,*args,**kwargs):
+		"""
+		Params: Name: Type: Default
+		------------------------------
+			| **selectable** : *bool* : True
+			| **enabled** : *bool* : True
+			| **editable** : *bool* : True
+			| **dragable** : *bool* : False
+			| **dropable** : *bool* : False
+			| **checkable** : *bool* : False
+			| **checked** : *bool* : False
+			| **font_family** : *str* : None
+			| **font_size** : *int* : None
+			| **size_hint** : *QSize* : None
+			| **status_tip** : *str* : None
+			| **tool_tip** : *str* : None
+			| **brush** : *QBrush* : None
+			| **icon_visable** : *bool* : False
+			| **icon_color** : *GlobalColor* : None
+			| **display_name** : *str* : None
+			| **background_color** : *GlobalColor* : None
+			| **foreground_color** : *GlobalColor* : None
+		"""
 			#raise ValueError("tree_item input must be and instance or subclass of Tree_Item and a %r was found" % type(tree_item))
-
-		self.tree_item                  = tree_item
-		self._item_selectable           = selectable
-		self._item_enabled              = enabled
-		self._item_editable             = editable
-		self._item_dragable             = dragable
-		self._item_dropable             = dropable
-		if checkable:
-			self._item_checkable        = checkable
-		else:
-			self._item_checkable        = False
-		self._item_tristate             = tristate
-		self._item_display_name         = display_name
-		self._item_font_family          = font_family
-		self._item_font_size            = font_size
-		self._item_font_weight          = font_weight
-		self._item_font_capitalization  = font_capitalization
-		self._item_background_color     = background_color
-		self._item_foreground_color     = foreground_color
-		self._item_brush                = brush
-		self._item_icon_visable         = icon_visable
-		self._item_icon_color           = icon_color
-		self._item_size_hint            = size_hint
-		self._item_status_tip           = status_tip
-		self._item_tool_tip             = tool_tip
-		self._item_horizontal_alignment = self.H_ALIGNMENT.Values.get(horizontal_alignment,None)
-		self._item_vertical_alignment   = self.V_ALIGNMENT.Values.get(vertical_alignment,None)
+		self._item_selectable           = kwargs.get("selectable",True)
+		self._item_enabled              = kwargs.get("enabled",True)
+		self._item_editable             = kwargs.get("editable",True)
+		self._item_dragable             = kwargs.get("dragable",False)
+		self._item_dropable             = kwargs.get("dropable",False)
+		self._item_checkable            = kwargs.get("checkable",False)
+		self._item_tristate             = kwargs.get("tristate",False)
+		self._item_display_name         = kwargs.get("display_name",None)
+		self._item_font_family          = kwargs.get("font_family",None)
+		self._item_font_size            = kwargs.get("font_size",None)
+		self._item_font_weight          = kwargs.get("font_weight",None)
+		self._item_font_capitalization  = kwargs.get("font_capitalization",None)
+		self._item_background_color     = kwargs.get("background_color",None)
+		self._item_foreground_color     = kwargs.get("foreground_color",None)
+		self._item_brush                = kwargs.get("brush",None)
+		self._item_icon_visable         = kwargs.get("icon_visable",False)
+		self._item_icon_color           = kwargs.get("icon_color",None)
+		self._item_size_hint            = kwargs.get("size_hint",None)
+		self._item_status_tip           = kwargs.get("status_tip",None)
+		self._item_tool_tip             = kwargs.get("tool_tip",None)
+		self._item_horizontal_alignment = self.H_ALIGNMENT.Values.get(kwargs.get("horizontal_alignment",None),None)
+		self._item_vertical_alignment   = self.V_ALIGNMENT.Values.get(kwargs.get("vertical_alignment",None),None)
 		self._data_icon                 = None #create_Item_Icon(":/outliner/group")
 		self._data_font                 = None
-		if checked:
-			self._data_checked              = PYQT.Qt.CheckState.Checked
+		if kwargs.get("checked",False):
+			self._data_checked          = PYQT.Qt.CheckState.Checked
 		else:
-			self._data_checked              = PYQT.Qt.CheckState.Unchecked
+			self._data_checked          = PYQT.Qt.CheckState.Unchecked
 		self._data_foreground_color     = None
 		self._data_background_color     = None
 		self._data_alignment            = None
 		self._data_flags                = PYQT.Qt.ItemFlags()
 		self._update_flags()
 		self._update_text_alignment()
-		self._internal_editor = None
 		if False:
-			isinstance(self.background_color,PYQT.QColor)
-			isinstance(self.foreground_color,PYQT.QColor)
-			isinstance(self.brush,PYQT.QBrush)
-			isinstance(self.size_hint,PYQT.QSize)
-			isinstance(self.status_tip,str)
-			isinstance(self.tool_tip,str) 
-			isinstance(self.text_font,PYQT.QFont)
-	#----------------------------------------------------------------------
-	@property
-	def has_editor(self):
-		""""""
-		return self._internal_editor is not None
-	#----------------------------------------------------------------------
-	@property
-	def internal_editor(self):
-		""""""
-		return self._internal_editor
-	#----------------------------------------------------------------------
-	@internal_editor.setter
-	def internal_editor(self,editor):
-		""""""
-		self._internal_editor = editor
+			self.background_color=PYQT.QColor
+			self.foreground_color=PYQT.QColor
+			self.brush=PYQT.QBrush
+			self.size_hint=PYQT.QSize
+			self.status_tip=str
+			self.tool_tip=str
+			self.text_font=PYQT.QFont
+			self.icon_visable = None
 	#----------------------------------------------------------------------
 	def createColorIcon(self, color):
 		if isinstance(color, str):
@@ -305,30 +455,23 @@ class Standered_Item_Data(object):
 					except AttributeError:
 						pass
 	#----------------------------------------------------------------------
-	@property
-	def icon_visable(self):
+	def _fn_get_icon_visable_value(self):
 		"""Returns Weather Or Not The Icon Is Visable"""
-		if self._item_icon_visable is None:
-			return False
-		else:
-			return self._item_icon_visable
+		return self._item_icon_visable
 	#----------------------------------------------------------------------
-	@icon_visable.setter
-	def icon_visable(self, value):
+	def _fn_set_icon_visable_value(self, value):
 		"""Set Weather Or Not The Icon Is Visable"""
 		if not isinstance(value,(bool, int)):
 			raise ValueError("input value must be of type bool or int and a %r was given" % type(value))
 		self._item_icon_visable = value
 	#----------------------------------------------------------------------
-	@property
-	def background_color(self):
+	def _fn_get_background_color_value(self):
 		"""Get The Backround Color Of A Item"""
 		if self._data_background_color is None and not self._item_background_color == None:
 			self._update_background_color()
 		return self._data_background_color
 	#----------------------------------------------------------------------
-	@background_color.setter
-	def background_color(self, value):
+	def _fn_set_background_color_value(self, value):
 		if value is None:
 			self._item_background_color = value
 		elif isinstance(value,PYQT.QColor):
@@ -337,14 +480,12 @@ class Standered_Item_Data(object):
 			raise ValueError("input value must be an instance of QT.QColor and a %r was given" % type(value))
 		self._update_background_color()
 	#----------------------------------------------------------------------
-	@property
-	def foreground_color(self):
+	def _fn_get_foreground_color_value(self):
 		if self._data_foreground_color is None and not self._item_foreground_color == None:
 			self._update_foregound_color()
 		return self._data_foreground_color
 	#----------------------------------------------------------------------
-	@foreground_color.setter
-	def foreground_color(self, value):
+	def _fn_set_foreground_color_value(self, value):
 		if value is None:
 			self._item_foreground_color = value
 		elif isinstance(value,(PYQT.QColor, PYQT.Qt.GlobalColor)):
@@ -355,63 +496,53 @@ class Standered_Item_Data(object):
 			raise ValueError("input value must be an instance of QT.QColor and a %r was given" % type(value))
 		self._update_foregound_color()
 	#----------------------------------------------------------------------
-	@property
-	def brush(self):
+	def _fn_get_brush_value(self):
 		if self._item_brush is None:
 			return self.DEF_VALS.BRUSH.value()
 		else:
 			return self._item_brush
 	#----------------------------------------------------------------------
-	@brush.setter
-	def brush(self, value):
+	def _fn_set_brush_value(self, value):
 		if not isinstance(value,PYQT.QBrush):
 			raise ValueError("input value must be an instance of QT.QBrush and a %r was given" % type(value))
 		self._item_bush = value
 	#----------------------------------------------------------------------
-	@property
-	def size_hint(self):
+	def _fn_get_size_hint_value(self):
 		return self._item_size_hint
 	#----------------------------------------------------------------------
-	@size_hint.setter
-	def size_hint(self, value):
+	def _fn_set_size_hint_value(self, value):
 		if not isinstance(value,PYQT.QSize):
 			raise ValueError("input value must be an instance of QT.QSize and a %r was given" % type(value))
 		self._item_size_hint = value	
 	#----------------------------------------------------------------------
-	@property
-	def status_tip(self):
+	def _fn_get_status_tip_value(self):
 		if self._item_status_tip is None:
 			return ""
 		else:
 			return self._item_status_tip
 	#----------------------------------------------------------------------
-	@status_tip.setter
-	def status_tip(self, value):
+	def _fn_set_status_tip_value(self, value):
 		if not isinstance(value,(str,unicode)):
 			raise ValueError("input value must be an instance of (str,unicode) and a %r was given" % type(value))
 		self._item_status_tip = value
 	#----------------------------------------------------------------------
-	@property
-	def tool_tip(self):
+	def _fn_get_tool_tip_value(self):
 		if self._item_tool_tip is None:
 			return ""
 		else:
 			return self._item_tool_tip
 	#----------------------------------------------------------------------
-	@tool_tip.setter
-	def tool_tip(self, value):
+	def _fn_set_tool_tip_value(self, value):
 		if not isinstance(value,(str,unicode)):
 			raise ValueError("input value must be an instance of (str,unicode) and a %r was given" % type(value))
 		self._item_tool_tip = value
 	#----------------------------------------------------------------------
-	@property
-	def vertical_alignment(self):
+	def _fn_get_vertical_alignment_value(self):
 		if self._item_vertical_alignment is None:
 			return self.DEF_VALS.DISPLAY.alignment_V
 		return self._item_vertical_alignment
 	#----------------------------------------------------------------------
-	@vertical_alignment.setter
-	def vertical_alignment(self, value):
+	def _fn_set_vertical_alignment_value(self, value):
 		""""""
 		if value is None:
 			self._item_vertical_alignment = value
@@ -421,14 +552,12 @@ class Standered_Item_Data(object):
 			raise ValueError("input value must be one of the fallowing (%s) and a %r was given" % (",".join(self.V_ALIGNMENT.Values.keys()), value))
 		self._update_text_alignment()
 	#----------------------------------------------------------------------
-	@property
-	def horizontal_alignment(self):
+	def _fn_get_horizontal_alignment_value(self):
 		if self._item_horizontal_alignment is None:
 			return self.DEF_VALS.DISPLAY.alignment_H
 		return self._item_horizontal_alignment
 	#----------------------------------------------------------------------
-	@horizontal_alignment.setter
-	def horizontal_alignment(self, value):
+	def _fn_set_horizontal_alignment_value(self, value):
 		if value is None:
 			self._item_horizontal_alignment = value
 		elif value in self.H_ALIGNMENT.Values.keys():
@@ -437,49 +566,42 @@ class Standered_Item_Data(object):
 			raise ValueError("input value must be one of the fallowing (%s) and a %r was given" % (",".join(self.H_ALIGNMENT.Values.keys()), value))
 		self._update_text_alignment()
 	#----------------------------------------------------------------------
-	@property
-	def text_alignment(self):
+	def _fn_get_text_alignment_value(self):
 		if self._data_alignment is None:
 			return PYQT.Qt.AlignmentFlag(self.horizontal_alignment|self.vertical_alignment)
 		return self._data_alignment
 	#----------------------------------------------------------------------
-	@property
-	def font_family(self):
+	def _fn_get_font_family_value(self):
 		if self._item_font_family is None:
 			return False
 		else:
 			return self._item_font_family
 	#----------------------------------------------------------------------
-	@font_family.setter
-	def font_family(self, value):
+	def _fn_set_font_family_value(self, value):
 		if not isinstance(value,(str, unicode)):
 			raise ValueError("input value must be an instance of str, unicode and a %r was given" % type(value))
 		self._item_font_family = value
 		self._update_font()
 	#----------------------------------------------------------------------
-	@property
-	def font_size(self):
+	def _fn_get_font_size_value(self):
 		if self._item_font_size is None:
 			return False
 		else:
 			return self._item_font_size
 	#----------------------------------------------------------------------
-	@font_size.setter
-	def font_size(self, value):
+	def _fn_set_font_size_value(self, value):
 		if not isinstance(value,(int)):
 			raise ValueError("input value must be an instance of (int) and a %r was given" % type(value))
 		self._item_font_size = value
 		self._update_font()
 	#----------------------------------------------------------------------
-	@property
-	def font_weight(self):
+	def _fn_get_font_weight_value(self):
 		if self._item_font_weight is None:
 			return False
 		else:
 			return self._item_font_weight
 	#----------------------------------------------------------------------
-	@font_weight.setter
-	def font_weight(self, value):
+	def _fn_set_font_weight_value(self, value):
 
 		if not isinstance(value,(int)):
 			raise ValueError("input value must be an instance of (int) and a %r was given" % type(value))
@@ -490,121 +612,104 @@ class Standered_Item_Data(object):
 		self._item_font_weight = value
 		self._update_font()
 	#----------------------------------------------------------------------
-	@property
-	def font_capitalization(self):
+	def _fn_get_font_capitalization_value(self):
 		if self._item_font_capitalization is None:
 			return False
 		else:
 			return self._item_font_capitalization
 	#----------------------------------------------------------------------
-	@font_capitalization.setter
-	def font_capitalization(self, value):
+	def _fn_set_font_capitalization_value(self, value):
 		if not isinstance(value,(int)):
 			raise ValueError("input value must be an instance of (int) and a %r was given" % type(value))
 		self._item_font_capitalization = value
 		self._update_font()
 	#----------------------------------------------------------------------
-	@property
-	def selectable(self):
+	def _fn_get_selectable_value(self):
 		if self._item_selectable is None:
 			return True
 		else:
 			return self._item_selectable
 	#----------------------------------------------------------------------
-	@selectable.setter
-	def selectable(self, value):
+	def _fn_set_selectable_value(self, value):
 		if not isinstance(value,(bool, int)):
 			raise ValueError("input value must be an instance of (bool, int) and a %r was given" % type(value))
 		self._item_selectable = value
 		self._update_flags()
 	#----------------------------------------------------------------------
-	@property
-	def checked(self):
+	def _fn_get_checked_value(self):
 		if self._item_checkable:
 			return self._data_checked
 		else:
 			return None
 	#----------------------------------------------------------------------
-	@checked.setter
-	def checked(self, value):
+	def _fn_set_checked_value(self, value):
 		if not self._item_checkable is None and self._item_checkable:
 			if value is True or value == PYQT.Qt.CheckState.Checked:
 				self._data_checked = PYQT.Qt.CheckState.Checked
 			else:
 				self._data_checked = PYQT.Qt.CheckState.Unchecked
 	#----------------------------------------------------------------------
-	@property
-	def enabled(self):
+	def _fn_get_enabled_value(self):
 		if self._item_enabled is None:
 			return True
 		else:
 			return self._item_enabled
 	#----------------------------------------------------------------------
-	@enabled.setter
-	def enabled(self, value):
+	def _fn_set_enabled_value(self, value):
 		if not isinstance(value,(bool, int)):
 			raise ValueError("input value must be an instance of (bool, int) and a %r was given" % type(value))
 		self._item_enabled = value
 		self._update_flags()
 	#----------------------------------------------------------------------
-	@property
-	def editable(self):
+	def _fn_get_editable_value(self):
 		if self._item_editable is None:
 			return True
 		else:
 			return self._item_editable 
 	#----------------------------------------------------------------------
-	@editable.setter
-	def editable(self, value):
+	def _fn_set_editable_value(self, value):
 		if not isinstance(value,(bool, int)):
 			raise ValueError("input value must be an instance of (bool, int) and a %r was given" % type(value))
 		self._item_editable = value
 		self._update_flags()
 	#----------------------------------------------------------------------
-	@property
-	def dragable(self):
+	def _fn_get_dragable_value(self):
 		if self._item_dragable is None:
 			return True
 		else:
 			return self._item_dragable
 	#----------------------------------------------------------------------
-	@dragable.setter
-	def dragable(self, value):
+	def _fn_set_dragable_value(self, value):
 		if not isinstance(value,(bool, int)):
 			raise ValueError("input value must be an instance of (bool, int) and a %r was given" % type(value))
 		self._item_dragable = value
 		self._update_flags()
 	#----------------------------------------------------------------------
-	@property
-	def dropable(self):
+	def _fn_get_dropable_value(self):
 		if self._item_dropable is None:
 			return True
 		else:
 			return self._item_dropable 
 	#----------------------------------------------------------------------
-	@dropable.setter
-	def dropable(self, value):
+	def _fn_set_dropable_value(self, value):
 		if not isinstance(value,(bool, int)):
 			raise ValueError("input value must be an instance of (bool, int) and a %r was given" % type(value))
 		self._item_dropable = value
 		self._update_flags()
 	#----------------------------------------------------------------------
-	@property
-	def checkable(self):
+	def _fn_get_checkable_value(self):
 		if self._item_checkable is None:
 			return False
 		else:
 			return self._item_checkable
 	#----------------------------------------------------------------------
-	@checkable.setter
-	def checkable(self, value):
+	def _fn_set_checkable_value(self, value):
 		if not isinstance(value,(bool, int)):
 			raise ValueError("input value must be an instance of (bool, int) and a %r was given" % type(value))
 		self._item_checkable = value
 		self._update_flags()
 	#----------------------------------------------------------------------
-	@property
-	def tristate(self):
+	def _fn_get_tristate_value(self):
 		if self._item_tristate is None:
 			return False
 		else:
@@ -613,35 +718,30 @@ class Standered_Item_Data(object):
 			else:
 				return False
 	#----------------------------------------------------------------------
-	@tristate.setter
-	def tristate(self, value):
+	def _fn_set_tristate_value(self, value):
 		if not isinstance(value,(bool, int)):
 			raise ValueError("input value must be an instance of (bool, int) and a %r was given" % type(value))
 		self._item_tristate = value
 		self._update_flags()
 	#----------------------------------------------------------------------
-	@property
-	def display_name(self):
+	def _fn_get_display_name_value(self):
 		if self._item_display_name is None:
 			return None
 		else:
 			return self._item_display_name
 	#----------------------------------------------------------------------
-	@display_name.setter
-	def display_name(self, value):
+	def _fn_set_display_name_value(self, value):
 		if not isinstance(value,(str, unicode, bool, int)):
 			raise ValueError("input value must be an instance of (str,unicode) and a %r was given" % type(value))
 		self._item_display_name = value
 	#----------------------------------------------------------------------
-	@property
-	def icon_color(self):
+	def _fn_get_icon_color_value(self):
 		if self._item_icon_color is None:
 			return self.DEF_VALS.DISPLAY.icon_color
 		else:
 			return self._item_icon_color
 	#----------------------------------------------------------------------
-	@icon_color.setter
-	def icon_color(self, value):
+	def _fn_set_icon_color_value(self, value):
 		if not isinstance(value,(PYQT.QColor, PYQT.Qt.GlobalColor, str, PYQT.QIcon)):
 			raise ValueError("input value must be an instance of (QT.QColor, QT.Qt.GlobalColor, str) and a %r was given" % type(value))
 		self._item_icon_color = value
@@ -650,16 +750,14 @@ class Standered_Item_Data(object):
 		else:
 			self._data_icon = value
 	#----------------------------------------------------------------------
-	@property
-	def font(self):
+	def _fn_get_font_value(self):
 		""""""
 		if any([val is not False for val in self.font_attributes]):
 			return self._data_font
 		else:
 			return None
 	#----------------------------------------------------------------------
-	@property
-	def icon(self):
+	def _fn_get_icon_value(self):
 		""""""
 		if self.icon_visable:
 			if self._data_icon is None:
@@ -672,20 +770,9 @@ class Standered_Item_Data(object):
 		else:
 			return None
 	#----------------------------------------------------------------------
-	@icon.setter
-	def icon(self,value):
+	def _fn_set_icon_value(self,value):
 		""""""
 		self.icon_color = value
-	@property
-	#----------------------------------------------------------------------
-	def column(self):
-		""""""
-		return self.tree_item._column_items.items.index(self)
-	@property
-	#----------------------------------------------------------------------
-	def index(self):
-		""""""
-		return self.tree_item.model.indexFromItemData(self)
 	#----------------------------------------------------------------------
 	@property
 	def flags(self):
@@ -760,123 +847,170 @@ class Standered_Item_Data(object):
 				self._data_background_color = PYQT.QColor(*self._item_background_color)
 	#----------------------------------------------------------------------
 	def data(self, role=Base_Item_Data_Roles.DISPLAY):
-		if role in [Base_Item_Data_Roles.DISPLAY, Base_Item_Data_Roles.EDIT]:
+		if   role in Base_Item_Data_Roles.DP_ED:                ## DISPLAY OR EDIT
 			return self.display_name
-		elif role == Base_Item_Data_Roles.FOREGROUND:
+		elif role == Base_Item_Data_Roles.FOREGROUND:           ## FOREGROUND
 			return self.foreground_color
-		elif role == Base_Item_Data_Roles.BACKGROUND:
+		elif role == Base_Item_Data_Roles.BACKGROUND:           ## BACKGROUND
 			return self.background_color
-		elif role == Base_Item_Data_Roles.SIZEHINT:
+		elif role == Base_Item_Data_Roles.SIZEHINT:             ## SIZEHINT
 			return self.size_hint
-		elif role == Base_Item_Data_Roles.TOOLTIP:
+		elif role == Base_Item_Data_Roles.TOOLTIP:              ## TOOLTIP
 			return self.tool_tip
-		elif role == Base_Item_Data_Roles.STATUSTIP:
+		elif role == Base_Item_Data_Roles.STATUSTIP:            ## STATUSTIP
 			return self.status_tip
-		elif role == Base_Item_Data_Roles.FONT:
+		elif role == Base_Item_Data_Roles.FONT:                 ## FONT
 			return self.font
-		elif role == Base_Item_Data_Roles.TEXT_ALIGNMENT:
+		elif role == Base_Item_Data_Roles.TEXT_ALIGNMENT:       ## TEXT_ALIGNMENT
 			return self.text_alignment
-		elif role == Base_Item_Data_Roles.DECORATION:
+		elif role == Base_Item_Data_Roles.DECORATION:           ## DECORATION
 			if self.icon_visable:
 				return self.icon
 			else:
 				return None
-		elif role == Base_Item_Data_Roles.ICON_COLOR:
+		elif role == Base_Item_Data_Roles.ICON_COLOR:           ## ICON_COLOR
 			return self.icon_color
-		elif role == Base_Item_Data_Roles.FONT_SIZE:
+		elif role == Base_Item_Data_Roles.FONT_SIZE:            ## FONT_SIZE
 			return self.text_size
-		elif role == Base_Item_Data_Roles.FONT_WEIGHT:
+		elif role == Base_Item_Data_Roles.FONT_WEIGHT:          ## FONT_WEIGHT
 			return self.font_weight
-		elif role == Base_Item_Data_Roles.HORIZONTAL_ALIGNMENT:
-			return self.horizontal_alignment
-		elif role == Base_Item_Data_Roles.VERTICAL_ALIGNMENT:
-			return self.vertical_alignment
-		elif role == Base_Item_Data_Roles.CHECKSTATE:
-			return self.checked
-		elif role == Base_Item_Data_Roles.CHECKABLE:
+		elif role == Base_Item_Data_Roles.FONT_FAMILY:          ## FONT_FAMILY
+			return self.font_family
+		elif role == Base_Item_Data_Roles.FONT_CAPITALIZATION:  ## FONT_CAPITALIZATION
+			return self.font_capitalization
+		elif role == Base_Item_Data_Roles.SELECTABLE:           ## SELECTABLE
+			return self.selectable
+		elif role == Base_Item_Data_Roles.ENABLED:              ## ENABLED
+			return self.enabled
+		elif role == Base_Item_Data_Roles.EDITABLE:             ## EDITABLE
+			return self.editable
+		elif role == Base_Item_Data_Roles.DRAGABLE:             ## DRAGABLE
+			return self.dragable
+		elif role == Base_Item_Data_Roles.DROPABLE:             ## DROPABLE
+			return self.dropable
+		elif role == Base_Item_Data_Roles.CHECKABLE:            ## CHECKABLE
 			return self.checkable
-		elif role == Base_Item_Data_Roles.USER:
+		elif role == Base_Item_Data_Roles.CHECKSTATE:           ## CHECKSTATE
+			return self.checked
+		elif role == Base_Item_Data_Roles.TRISTATE:             ## TRISTATE
+			return self.tristate
+		elif role == Base_Item_Data_Roles.HORIZONTAL_ALIGNMENT: ## HORIZONTAL_ALIGNMENT
+			return self.horizontal_alignment
+		elif role == Base_Item_Data_Roles.VERTICAL_ALIGNMENT:   ## VERTICAL_ALIGNMENT
+			return self.vertical_alignment
+		elif role == Base_Item_Data_Roles.USER:                 ## USER
 			return self
-		elif role == Base_Item_Data_Roles.TREE_OBJECT:
-			return self.tree_item
-		elif role == Base_Item_Data_Roles.INTERNAL_EDITOR:
-			return self.internal_editor
 		return None
 	#----------------------------------------------------------------------
 	def setData(self, role, value):
 		res = False
-
-		if role in [Base_Item_Data_Roles.DISPLAY, Base_Item_Data_Roles.EDIT]:
+		if   role in Base_Item_Data_Roles.DP_ED:                ## DISPLAY OR EDIT
 			self.display_name = value
 			res = True
-		elif role == Base_Item_Data_Roles.FOREGROUND:
+		elif role == Base_Item_Data_Roles.FOREGROUND:           ## FOREGROUND
 			self.foreground_color = value
 			res = True
-		elif role == Base_Item_Data_Roles.BACKGROUND:
+		elif role == Base_Item_Data_Roles.BACKGROUND:           ## BACKGROUND
 			self.background_color = value
 			res = True
-		elif role == Base_Item_Data_Roles.SIZEHINT:
+		elif role == Base_Item_Data_Roles.SIZEHINT:             ## SIZEHINT
 			self.size_hint        = value
 			res = True
-		elif role == Base_Item_Data_Roles.TOOLTIP:
+		elif role == Base_Item_Data_Roles.TOOLTIP:              ## TOOLTIP
 			self.tool_tip         = value
 			res = True
-		elif role == Base_Item_Data_Roles.STATUSTIP:
+		elif role == Base_Item_Data_Roles.STATUSTIP:            ## STATUSTIP
 			self.status_tip       = value
 			res = True
-		elif role == Base_Item_Data_Roles.FONT:
+		elif role == Base_Item_Data_Roles.FONT:                 ## FONT
 			self.text_font        = value
 			res = True
-		elif role == Base_Item_Data_Roles.TEXT_ALIGNMENT:
+		elif role == Base_Item_Data_Roles.TEXT_ALIGNMENT:       ## TEXT_ALIGNMENT
 			self.text_alignment   = value
 			res = True
-		elif role == Base_Item_Data_Roles.DECORATION:
+		elif role == Base_Item_Data_Roles.DECORATION:           ## DECORATION
 			self.brush            = value
 			res = True
-		elif role == Base_Item_Data_Roles.ICON_COLOR:
+		elif role == Base_Item_Data_Roles.ICON_COLOR:           ## ICON_COLOR
 			self.icon_color       = value
 			res = True
-		elif role == Base_Item_Data_Roles.FONT_SIZE:
+		elif role == Base_Item_Data_Roles.FONT_SIZE:            ## FONT_SIZE
 			self.text_size        = value
-		elif role == Base_Item_Data_Roles.FONT_WEIGHT:
+		elif role == Base_Item_Data_Roles.FONT_WEIGHT:          ## FONT_WEIGHT
 			self.font_weight      = value
 			res = True
-		elif role == Base_Item_Data_Roles.FONT_FAMILY:
+		elif role == Base_Item_Data_Roles.FONT_FAMILY:          ## FONT_FAMILY
 			self.font_family         = value
 			res = True
-		elif role == Base_Item_Data_Roles.FONT_CAPITALIZATION:
+		elif role == Base_Item_Data_Roles.FONT_CAPITALIZATION:  ## FONT_CAPITALIZATION
 			self.font_capitalization = value
 			res = True
-		elif role == Base_Item_Data_Roles.SELECTABLE:
+		elif role == Base_Item_Data_Roles.SELECTABLE:           ## SELECTABLE
 			self.selectable        = value
 			res = True
-		elif role == Base_Item_Data_Roles.ENABLED:
+		elif role == Base_Item_Data_Roles.ENABLED:              ## ENABLED
 			self.enabled =  value
 			res = True
-		elif role == Base_Item_Data_Roles.EDITABLE:
+		elif role == Base_Item_Data_Roles.EDITABLE:             ## EDITABLE
 			self.editable = value
 			res = True
-		elif role == Base_Item_Data_Roles.DRAGABLE:
+		elif role == Base_Item_Data_Roles.DRAGABLE:             ## DRAGABLE
 			self.dragable = value
 			res = True
-		elif role == Base_Item_Data_Roles.DROPABLE:
+		elif role == Base_Item_Data_Roles.DROPABLE:             ## DROPABLE
 			self.dropable = value
 			res = True
-		elif role == Base_Item_Data_Roles.CHECKABLE:
+		elif role == Base_Item_Data_Roles.CHECKABLE:            ## CHECKABLE
 			self.checkable = value
 			res = True
-		elif role == Base_Item_Data_Roles.CHECKSTATE:
+		elif role == Base_Item_Data_Roles.CHECKSTATE:           ## CHECKSTATE
 			self.checked = value
-		elif role == Base_Item_Data_Roles.TRISTATE:
+		elif role == Base_Item_Data_Roles.TRISTATE:             ## TRISTATE
 			self.tristate = value
 			res = True
-		elif role == Base_Item_Data_Roles.HORIZONTAL_ALIGNMENT:
+		elif role == Base_Item_Data_Roles.HORIZONTAL_ALIGNMENT: ## HORIZONTAL_ALIGNMENT
 			self.horizontal_alignment = value
 			res = True
-		elif role == Base_Item_Data_Roles.VERTICAL_ALIGNMENT:
+		elif role == Base_Item_Data_Roles.VERTICAL_ALIGNMENT:   ## VERTICAL_ALIGNMENT
 			self.vertical_alignment = value
 			res = True
 		return res
+
+########################################################################
+class Standered_Item_Data(Standered_Item):
+	"""This Is The Base Item Data Class It Only Stores Data That Is Needed To Display Itself"""
+	#----------------------------------------------------------------------
+	def __init__(self,*args,**kwargs):
+		""""""
+		super(Standered_Item_Data,self).__init__(**kwargs)
+		self.tree_item                  = kwargs.get("tree_item",None)
+		if False:
+			isinstance(self.tree_item, DATA_TYPES.Model_Items.Base_Model_Item)
+			#raise ValueError("tree_item input must be and instance or subclass of Tree_Item and a %r was found" % type(tree_item))
+		self._internal_editor = None
+	#----------------------------------------------------------------------
+	@property
+	def has_editor(self):
+		""""""
+		return self._internal_editor is not None
+	#----------------------------------------------------------------------
+	@property
+	def internal_editor(self):
+		""""""
+		return self._internal_editor
+	#----------------------------------------------------------------------
+	@internal_editor.setter
+	def internal_editor(self,editor):
+		""""""
+		self._internal_editor = editor
+	#----------------------------------------------------------------------
+	def _fn_get_column_value(self):
+		""""""
+		return self.tree_item._column_items.items.index(self)
+	#----------------------------------------------------------------------
+	def _fn_get_index_value(self):
+		""""""
+		return self.tree_item.model.indexFromItemData(self)
 	#----------------------------------------------------------------------
 	def _update_Changed_Data(self, role):
 		""""""
@@ -885,33 +1019,315 @@ class Standered_Item_Data(object):
 			self.tree_item.model.dataChanged.emit(index, index, role)
 		except:
 			self.tree_item.model.dataChanged.emit(index, index)
+	#----------------------------------------------------------------------
+	def data(self, role=Base_Item_Data_Roles.DISPLAY):
+		if role == Base_Item_Data_Roles.TREE_OBJECT:
+			return self.tree_item
+		elif role == Base_Item_Data_Roles.INTERNAL_EDITOR:
+			return self.internal_editor
+		else:
+			return super(Standered_Item_Data,self).data(role=role)
 
+########################################################################
+class Standered_Item_List_Combo_Box(QComboBox.ComboBox):
+	#----------------------------------------------------------------------
+	def __init__(self,item_list,parent=None):
+		""""""
+		super(Standered_Item_List_Combo_Box,self).__init__(parent=parent)
+		isinstance(item_list,Standered_Item_List)
+		for item in item_list:
+			self.addItem(item.display_name,userData=item)
+		self.setEditable(False)
+	#----------------------------------------------------------------------
+	def itemText(self, index):
+		""""""
+		res = super(Standered_Item_List_Combo_Box,self).itemText(index)
+		return res
+	#----------------------------------------------------------------------
+	def itemData(self, index, role=Base_Item_Data_Roles.USER):
+		""""""
+		res = super(Standered_Item_List_Combo_Box,self).itemData(index,role)
+		return res
+	#----------------------------------------------------------------------
+	def setItemData(self, index, value, role=Base_Item_Data_Roles.USER):
+		""""""
+		super(Standered_Item_List_Combo_Box,self).setItemData(index,value,role)
+
+########################################################################
+class Standered_Item_List_Data_Editor(Item_Data_Editor):
+	#----------------------------------------------------------------------
+	def __init__(self,item_list):
+		""""""
+		super(Standered_Item_List_Data_Editor,self).__init__(item_list)
+		isinstance(self._editor_data,Standered_Item_List)
+	#----------------------------------------------------------------------
+	def createEditor(self,parent=None,index=None):
+		""""""
+		self._editor = Standered_Item_List_Combo_Box(self._editor_data,parent=parent)
+		return self._editor
+	#----------------------------------------------------------------------
+	def setEditorData(self):
+		""""""
+		self._editor.setCurrentIndex(self._editor.findText(self._editor_data.display_name))
+	#----------------------------------------------------------------------
+	def setModelData(self):
+		""""""
+		self._editor_data.active_index = self._editor.CurrentIndex
+
+######################################################################## 
+class Standered_Item_List(list):
+	""""""
+	__metaclass__ = _AUTO_PROPERTIES_METACLASS
+	#----------------------------------------------------------------------
+	def __init__(self,*args,**kwargs):
+		"""Constructor"""
+		super(Standered_Item_List,self).__init__(*args)
+		if not len(self):
+			self.append(Standered_Item(display_name="A"))
+			self.append(Standered_Item(display_name="B"))
+			self.append(Standered_Item(display_name="C"))
+		self.tree_item        = kwargs.get("tree_item",None)
+		self._active_index    = kwargs.get("active_index",None)
+		self._internal_editor = Standered_Item_List_Data_Editor(self)
+		
+		if self._active_index == None:
+			self.active_index = 0
+			
+		if False:
+			isinstance(self.tree_item, DATA_TYPES.Model_Items.Base_Model_Item)
+			self.active_item = Internal_Item_Data
+			self.active_index = 0
+	#----------------------------------------------------------------------
+	def _fn_get_active_index_value(self):
+		""""""
+		return self._active_index
+	#----------------------------------------------------------------------
+	def _fn_set_active_index_value(self,value):
+		""""""
+		if isinstance(value,int) or value in self:
+			if isinstance(value,int):
+				try:
+					item = self[value]
+				except IndexError:
+					if value >= len(self):
+						item = self[-1]
+					elif value < 0:
+						item = self[0]
+				finally:
+					self._active_index = self.get_Index(item)
+			else:
+				self._active_index = self.get_Index(value)
+		else:
+			raise ValueError("value input must be an int or an item within this list")
+	#----------------------------------------------------------------------
+	def get_Index(self,item):
+		""""""
+		return list.index(self,item)
+	#----------------------------------------------------------------------
+	def _fn_get_active_item_value(self):
+		""""""
+		return self[self._active_index]
+	#----------------------------------------------------------------------
+	@property
+	def internal_editor(self):
+		""""""
+		return self._internal_editor
+	#----------------------------------------------------------------------
+	@property
+	def flags(self):
+		""""""
+		return self.active_item.flags	
+	#----------------------------------------------------------------------
+	def _fn_get_column_value(self):
+		""""""
+		return self.tree_item._column_items.items.index(self)
+	#----------------------------------------------------------------------
+	def _fn_get_index_value(self):
+		""""""
+		return self.tree_item.model.indexFromItemData(self)
+	#----------------------------------------------------------------------
+	def _fn_get_icon_visable_value(self):
+		"""Returns Weather Or Not The Icon Is Visable"""
+		return self.active_item.icon_visable
+	#----------------------------------------------------------------------
+	def _fn_set_icon_visable_value(self, value):
+		"""Set Weather Or Not The Icon Is Visable"""
+		self.active_item.icon_visable = value
+	#----------------------------------------------------------------------
+	def _fn_get_background_color_value(self):
+		"""Get The Backround Color Of A Item"""
+		return self.active_item.background_color
+	#----------------------------------------------------------------------
+	def _fn_set_background_color_value(self, value):
+		self.active_item.background_color = value
+	#----------------------------------------------------------------------
+	def _fn_get_foreground_color_value(self):
+		return self.active_item.foreground_color
+	#----------------------------------------------------------------------
+	def _fn_set_foreground_color_value(self, value):
+		self.active_item.foreground_color = value
+	#----------------------------------------------------------------------
+	def _fn_get_brush_value(self):
+		return self.active_item.brush
+	#----------------------------------------------------------------------
+	def _fn_set_brush_value(self, value):
+		self.active_item.brush = value
+	#----------------------------------------------------------------------
+	def _fn_get_size_hint_value(self):
+		return self.active_item.size_hint
+	#----------------------------------------------------------------------
+	def _fn_set_size_hint_value(self, value):
+		self.active_item.size_hint = value
+	#----------------------------------------------------------------------
+	def _fn_get_status_tip_value(self):
+		return self.active_item.status_tip
+	#----------------------------------------------------------------------
+	def _fn_set_status_tip_value(self, value):
+		self.active_item.status_tip = value
+	#----------------------------------------------------------------------
+	def _fn_get_tool_tip_value(self):
+		return self.active_item.tool_tip
+	#----------------------------------------------------------------------
+	def _fn_set_tool_tip_value(self, value):
+		self.active_item.tool_tip = value
+	#----------------------------------------------------------------------
+	def _fn_get_vertical_alignment_value(self):
+		return self.active_item.vertical_alignment
+	#----------------------------------------------------------------------
+	def _fn_set_vertical_alignment_value(self, value):
+		self.active_item.vertical_alignment = value
+	#----------------------------------------------------------------------
+	def _fn_get_horizontal_alignment_value(self):
+		return self.active_item.horizontal_alignment
+	#----------------------------------------------------------------------
+	def _fn_set_horizontal_alignment_value(self, value):
+		self.active_item.horizontal_alignment = value
+	#----------------------------------------------------------------------
+	def _fn_get_text_alignment_value(self):
+		return self.active_item.text_alignment
+	#----------------------------------------------------------------------
+	def _fn_get_font_family_value(self):
+		return self.active_item.font_family
+	#----------------------------------------------------------------------
+	def _fn_set_font_family_value(self, value):
+		self.active_item.font_family = value
+	#----------------------------------------------------------------------
+	def _fn_get_font_size_value(self):
+		return self.active_item.font_size
+	#----------------------------------------------------------------------
+	def _fn_set_font_size_value(self, value):
+		self.active_item.font_size = value
+	#----------------------------------------------------------------------
+	def _fn_get_font_weight_value(self):
+		return self.active_item.font_weight
+	#----------------------------------------------------------------------
+	def _fn_set_font_weight_value(self, value):
+		self.active_item.font_weight = value
+	#----------------------------------------------------------------------
+	def _fn_get_font_capitalization_value(self):
+		return self.active_item.font_capitalization
+	#----------------------------------------------------------------------
+	def _fn_set_font_capitalization_value(self, value):
+		self.active_item.font_capitalization = value
+	#----------------------------------------------------------------------
+	def _fn_get_selectable_value(self):
+		return self.active_item.selectable
+	#----------------------------------------------------------------------
+	def _fn_set_selectable_value(self, value):
+		self.active_item.selectable = value
+	#----------------------------------------------------------------------
+	def _fn_get_checked_value(self):
+		return self.active_item.checked
+	#----------------------------------------------------------------------
+	def _fn_set_checked_value(self, value):
+		self.active_item.checked = value
+	#----------------------------------------------------------------------
+	def _fn_get_enabled_value(self):
+		return self.active_item.enabled
+	#----------------------------------------------------------------------
+	def _fn_set_enabled_value(self, value):
+		self.active_item.enabled = value
+	#----------------------------------------------------------------------
+	def _fn_get_editable_value(self):
+		return self.active_item.editable
+	#----------------------------------------------------------------------
+	def _fn_set_editable_value(self, value):
+		self.active_item.editable = value
+	#----------------------------------------------------------------------
+	def _fn_get_dragable_value(self):
+		return self.active_item.dragable
+	#----------------------------------------------------------------------
+	def _fn_set_dragable_value(self, value):
+		self.active_item.dragable = value
+	#----------------------------------------------------------------------
+	def _fn_get_dropable_value(self):
+		return self.active_item.dropable
+	#----------------------------------------------------------------------
+	def _fn_set_dropable_value(self, value):
+		self.active_item.dropable = value
+	#----------------------------------------------------------------------
+	def _fn_get_checkable_value(self):
+		return self.active_item.checkable
+	#----------------------------------------------------------------------
+	def _fn_set_checkable_value(self, value):
+		self.active_item.checkable = value
+	#----------------------------------------------------------------------
+	def _fn_get_tristate_value(self):
+		return self.active_item.tristate
+	#----------------------------------------------------------------------
+	def _fn_set_tristate_value(self, value):
+		self.active_item.tristate = value
+	#----------------------------------------------------------------------
+	def _fn_get_display_name_value(self):
+		return self.active_item.display_name
+	#----------------------------------------------------------------------
+	def _fn_set_display_name_value(self, value):
+		self.active_item.display_name = value
+	#----------------------------------------------------------------------
+	def _fn_get_icon_color_value(self):
+		return self.active_item.icon_color
+	#----------------------------------------------------------------------
+	def _fn_set_icon_color_value(self, value):
+		self.active_item.icon_color = value
+	#----------------------------------------------------------------------
+	def _fn_get_font_value(self):
+		""""""
+		return self.active_item.font
+	#----------------------------------------------------------------------
+	def _fn_get_icon_value(self):
+		""""""
+		return self.active_item.icon
+	#----------------------------------------------------------------------
+	def _fn_set_icon_value(self,value):
+		""""""
+		self.active_item.icon = value
+	#----------------------------------------------------------------------
+	def data(self, role=Base_Item_Data_Roles.DISPLAY):
+		if role == Base_Item_Data_Roles.TREE_OBJECT:
+			return self.tree_item
+		elif role == Base_Item_Data_Roles.INTERNAL_EDITOR:
+			return self.internal_editor
+		else:
+			return self.active_item.data(role=role)
+	#----------------------------------------------------------------------
+	def setData(self, role, value):
+		return self.active_item.setData(role,value)
+	#----------------------------------------------------------------------
+	def _update_Changed_Data(self, role):
+		""""""
+		index =  self.index
+		try:
+			self.tree_item.model.dataChanged.emit(index, index, role)
+		except:
+			self.tree_item.model.dataChanged.emit(index, index)	
 ########################################################################
 class Internal_Item_Data(Standered_Item_Data):
 	"""This Is The Item Data Class For Use If Any Costom Data Needs To Be Accesed This Data Is Contained in the internal_data attribute"""
 	#----------------------------------------------------------------------
-	def __init__(self,
-	             tree_item            = None,
-	             selectable           = None, enabled             = None, editable     = None,
-	             dragable             = None, dropable            = None, checkable    = None, checked = False,
-	             tristate             = None, font_family         = None, font_size    = None,
-	             size_hint            = None, status_tip          = None, tool_tip     = None,
-	             brush                = None, icon_visable        = None, icon_color   = None,
-	             font_weight          = None, font_capitalization = None, display_name = None,
-	             background_color     = None, foreground_color    = None,
-	             horizontal_alignment = None, vertical_alignment  = None,
-	             internal_data = None):
+	def __init__(self,*args,**kwargs):
 		""" """
-		super(Internal_Item_Data, self).__init__(tree_item,
-		                                selectable           = selectable          , enabled             = enabled            , editable     = editable,
-		                                dragable             = dragable            , dropable            = dropable           , checkable    = checkable, checked=checked,
-		                                tristate             = tristate            , font_family         = font_family        , font_size    = font_size,
-		                                size_hint            = size_hint           , status_tip          = status_tip         , tool_tip     = tool_tip,
-		                                brush                = brush               , icon_visable        = icon_visable       , icon_color   = icon_color,
-		                                font_weight          = font_weight         , font_capitalization = font_capitalization, display_name = display_name,
-		                                background_color     = background_color    , foreground_color    = foreground_color,
-		                                horizontal_alignment = horizontal_alignment, vertical_alignment  = vertical_alignment)
-		self._internal_data = internal_data
+		super(Internal_Item_Data, self).__init__(*args,**kwargs)
+		self._internal_data = kwargs.get("internal_data",None)
 	#----------------------------------------------------------------------
 	def data(self, role=Base_Item_Data_Roles.DISPLAY):
 		if role == Base_Item_Data_Roles.INTERNAL_DATA:
@@ -928,21 +1344,14 @@ class Internal_Item_Data(Standered_Item_Data):
 			self._update_Changed_Data(role)
 		return res
 	#----------------------------------------------------------------------
-	@property
-	def internal_data(self):
+	def _fn_get_internal_data_value(self):
 		""""""
 		return self._internal_data
 	#----------------------------------------------------------------------
-	@internal_data.setter
-	def internal_data(self, value):
+	def _fn_set_internal_data_value(self, value):
 		""""""
 		self._internal_data = value
-# ======================================================================
-# DATA MODEL STANDERD ITEM CONTAINERS
-# ----------------------------------------------------------------------
-# Synopsis:
-#     Like A StanderedItem
-# ======================================================================
+		
 ########################################################################
 class Column_Item_List(object):
 	#----------------------------------------------------------------------
