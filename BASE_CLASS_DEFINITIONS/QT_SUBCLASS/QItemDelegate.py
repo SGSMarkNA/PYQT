@@ -25,22 +25,6 @@ class Item_Delegate(PYQT.QItemDelegate):
 		isinstance(res,PYQT.QItemEditorFactory)
 		return res
 	#----------------------------------------------------------------------
-	def check(self,option,bounding,variant):
-		"""
-		check(option,bounding,variant)
-			option=PYQT.QStyleOptionViewItem
-			bounding=PYQT.QRect
-			variant=object
-
-		Note that on Mac, if /usr/include/AssertMacros.h is included prior to PySide.PYQT.QItemDelegate , and the application is building in debug mode, the check(assertion) will conflict with QItemDelegate::check.
-		To avoid this problem, add
-		#ifdef check #undef check #endif
-		after including AssertMacros.h
-		"""
-		res = super(Item_Delegate,self).check(option,bounding,variant)
-		isinstance(res,PYQT.QRect)
-		return res
-	#----------------------------------------------------------------------
 	def decoration(self,option,variant):
 		"""
 		decoration(option,variant)

@@ -156,7 +156,7 @@ class Item_Data_Editor(object):
 		pass
 
 ########################################################################
-class Item_Data_Delegate(PYQT.QItemDelegate):
+class Item_Data_Delegate(QItemDelegate.Item_Delegate):
 	#----------------------------------------------------------------------
 	def createEditor(self, parent, option, index):
 		self.temp_internal_editor = index.data(Base_Item_Data_Roles.INTERNAL_EDITOR)
@@ -179,8 +179,8 @@ class Item_Data_Delegate(PYQT.QItemDelegate):
 	#----------------------------------------------------------------------
 	def setModelData(self, editor, model, index):
 		item_editor = index.data(Base_Item_Data_Roles.INTERNAL_EDITOR)
-		if not item_editor == None:
-			return item_editor.setModelData()
+		if not self.temp_internal_editor == None:
+			return self.temp_internal_editor.setModelData()
 		else:
 			return super(Item_Data_Delegate,self).setModelData(editor, model, index)
 	#----------------------------------------------------------------------
@@ -208,7 +208,10 @@ class Item_Data_Delegate(PYQT.QItemDelegate):
 		isinstance(option,PYQT.QStyleOptionViewItem)
 		isinstance(index,PYQT.QModelIndex)
 		super(Item_Data_Delegate, self).drawBackground(painter, option, rect)
-
+	#----------------------------------------------------------------------
+	def editorEvent(self,event, model, option, index):
+		""""""
+		return super(Item_Data_Delegate, self).editorEvent(event, model, option, index)
 	
 ########################################################################
 class Spin_Box_Data_Editor(Item_Data_Editor):
@@ -965,6 +968,7 @@ class Standered_Item(object):
 			res = True
 		elif role == Base_Item_Data_Roles.CHECKSTATE:           ## CHECKSTATE
 			self.checked = value
+			res = True
 		elif role == Base_Item_Data_Roles.TRISTATE:             ## TRISTATE
 			self.tristate = value
 			res = True
@@ -1014,11 +1018,12 @@ class Standered_Item_Data(Standered_Item):
 	#----------------------------------------------------------------------
 	def _update_Changed_Data(self, role):
 		""""""
-		index =  self.index
-		try:
-			self.tree_item.model.dataChanged.emit(index, index, role)
-		except:
-			self.tree_item.model.dataChanged.emit(index, index)
+		if self.tree_item is not None:
+			index =  self.index
+			try:
+				self.tree_item.model.dataChanged.emit(index, index, role)
+			except:
+				self.tree_item.model.dataChanged.emit(index, index)
 	#----------------------------------------------------------------------
 	def data(self, role=Base_Item_Data_Roles.DISPLAY):
 		if role == Base_Item_Data_Roles.TREE_OBJECT:
@@ -1029,15 +1034,34 @@ class Standered_Item_Data(Standered_Item):
 			return super(Standered_Item_Data,self).data(role=role)
 
 ########################################################################
+class Standered_Item_List_Combo_Box_Line_Edit(PYQT.QLineEdit):
+	#----------------------------------------------------------------------
+	def __init__(self,item_list,parent=None):
+		""""""
+		super(Standered_Item_List_Combo_Box_Line_Edit,self).__init__(parent=parent)
+		self._item_list = item_list
+		self.editingFinished.connect(self.on_editing_finished)
+	#----------------------------------------------------------------------
+	def on_editing_finished(self):
+		""""""
+		if not self._item_list.active_item.display_name == self.text():
+			self._item_list.active_item.display_name = self.text()
+########################################################################
 class Standered_Item_List_Combo_Box(QComboBox.ComboBox):
 	#----------------------------------------------------------------------
 	def __init__(self,item_list,parent=None):
 		""""""
 		super(Standered_Item_List_Combo_Box,self).__init__(parent=parent)
 		isinstance(item_list,Standered_Item_List)
+		self.setLineEdit(Standered_Item_List_Combo_Box_Line_Edit(item_list, parent=self))
+		self._item_list = item_list
 		for item in item_list:
 			self.addItem(item.display_name,userData=item)
-		self.setEditable(False)
+		self.setEditable(True)
+		#self.activated.connect(self.myactived)
+		self.currentIndexChanged.connect(self.mycurrentIndexChanged)
+		self.highlighted.connect(self.myhighlighted)
+		#self.editTextChanged.connect(self.myeditTextChanged)
 	#----------------------------------------------------------------------
 	def itemText(self, index):
 		""""""
@@ -1052,7 +1076,46 @@ class Standered_Item_List_Combo_Box(QComboBox.ComboBox):
 	def setItemData(self, index, value, role=Base_Item_Data_Roles.USER):
 		""""""
 		super(Standered_Item_List_Combo_Box,self).setItemData(index,value,role)
-
+	#----------------------------------------------------------------------
+	def setItemText(self, index, text):
+		""""""
+		super(Standered_Item_List_Combo_Box,self).setItemText(index,text)
+	#----------------------------------------------------------------------
+	def setEditText(self,text):
+		""""""
+		super(Standered_Item_List_Combo_Box,self).setEditText(text)
+	#----------------------------------------------------------------------
+	def myactived(self,value):
+		""""""
+		print "item activated {}".format(value)
+		self._item_list.active_index=value
+	#----------------------------------------------------------------------
+	def myhighlighted(self,value):
+		""""""
+		print "highlighted Changed {}".format(value)
+		#self._item_list.active_index=value
+	#----------------------------------------------------------------------
+	def mycurrentIndexChanged(self,value):
+		""""""
+		print "current Index Changed {}".format(value)
+		self._item_list.active_index=value
+	#----------------------------------------------------------------------
+	def myeditTextChanged(self,value):
+		""""""
+		print "current Text Changed {}".format(value)
+		#self._item_list.active_item.display_name=value
+	#----------------------------------------------------------------------
+	def showPopup(self):
+		""""""
+		super(Standered_Item_List_Combo_Box,self).showPopup()
+		print "Popup Shown"
+		self._item_list.active_index=self.CurrentIndex
+	#----------------------------------------------------------------------
+	def hidePopup(self):
+		""""""
+		super(Standered_Item_List_Combo_Box,self).hidePopup()
+		print "Popup Hidden"
+		self._item_list.active_index=self.CurrentIndex
 ########################################################################
 class Standered_Item_List_Data_Editor(Item_Data_Editor):
 	#----------------------------------------------------------------------
@@ -1069,10 +1132,11 @@ class Standered_Item_List_Data_Editor(Item_Data_Editor):
 	def setEditorData(self):
 		""""""
 		self._editor.setCurrentIndex(self._editor.findText(self._editor_data.display_name))
+		#self._editor.showPopup()
 	#----------------------------------------------------------------------
 	def setModelData(self):
 		""""""
-		self._editor_data.active_index = self._editor.CurrentIndex
+		
 
 ######################################################################## 
 class Standered_Item_List(list):
@@ -1311,15 +1375,18 @@ class Standered_Item_List(list):
 			return self.active_item.data(role=role)
 	#----------------------------------------------------------------------
 	def setData(self, role, value):
-		return self.active_item.setData(role,value)
+		res = self.active_item.setData(role,value)
+		if res:
+			self._update_Changed_Data(role)
+		return res
 	#----------------------------------------------------------------------
 	def _update_Changed_Data(self, role):
 		""""""
 		index =  self.index
 		try:
-			self.tree_item.model.dataChanged.emit(index, index, role)
+			self.tree_item.model.dataChanged.emit(index, index.sibling(0,self.tree_item.column_Count-1), role)
 		except:
-			self.tree_item.model.dataChanged.emit(index, index)	
+			self.tree_item.model.dataChanged.emit(index, index.sibling(0,self.tree_item.column_Count-1))
 ########################################################################
 class Internal_Item_Data(Standered_Item_Data):
 	"""This Is The Item Data Class For Use If Any Costom Data Needs To Be Accesed This Data Is Contained in the internal_data attribute"""
