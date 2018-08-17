@@ -1,6 +1,33 @@
 import PYQT
 from ..Base_Item_Data_Roles import Base_Item_Data_Roles
 
+
+class SpinBoxDelegate(PYQT.QItemDelegate):
+	def createEditor(self, parent, option, index):
+		val = index.data(PYQT.BASE_CLASS_DEFINITIONS.Item_Data_Roles.Base_Item_Data_Roles.USER)
+		editor = None
+		if hasattr(val,"has_editor"):
+			if val.has_editor:
+				editor = val.create_editor(parent=parent)
+		if editor == None:
+			editor = super(SpinBoxDelegate,self).createEditor(parent, option, index)
+
+		return editor
+
+	def setEditorData(self, spinBox, index):
+		value = index.model().data(index, PYQT.Qt.EditRole)
+
+		spinBox.setValue(int(value))
+
+	def setModelData(self, spinBox, model, index):
+		spinBox.interpretText()
+		value = spinBox.value()
+
+		model.setData(index, value, PYQT.Qt.EditRole)
+
+	def updateEditorGeometry(self, editor, option, index):
+		editor.setGeometry(option.rect)
+
 class Item_View_Delegate(PYQT.QItemDelegate):
 
 	def paint(self, painter, option, index):
