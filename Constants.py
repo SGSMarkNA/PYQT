@@ -917,7 +917,7 @@ class WindowType:
 	WindowMinimizeButtonHint          = PYQT.Qt.WindowMinimizeButtonHint
 	# WindowSoftkeysVisibleHint    = PYQT.Qt.WindowSoftkeysVisibleHint
 	CustomizeWindowHint               = PYQT.Qt.CustomizeWindowHint
-	WindowCancelButtonHint            = PYQT.Qt.WindowCancelButtonHint
+	#WindowCancelButtonHint            = PYQT.Qt.WindowCancelButtonHint Does Not Work In Maya 2020
 	WindowMaximizeButtonHint          = PYQT.Qt.WindowMaximizeButtonHint
 	Widget                            = PYQT.Qt.Widget
 	Popup                             = PYQT.Qt.Popup
@@ -930,7 +930,7 @@ class WindowType:
 	WindowMinMaxButtonsHint           = PYQT.Qt.WindowMinMaxButtonsHint
 	MacWindowToolBarButtonHint        = PYQT.Qt.MacWindowToolBarButtonHint
 	FramelessWindowHint               = PYQT.Qt.FramelessWindowHint
-	WindowOkButtonHint                = PYQT.Qt.WindowOkButtonHint
+	#WindowOkButtonHint                = PYQT.Qt.WindowOkButtonHint Does Not Work
 	MSWindowsOwnDC                    = PYQT.Qt.MSWindowsOwnDC
 	WindowCloseButtonHint             = PYQT.Qt.WindowCloseButtonHint
 	Dialog                            = PYQT.Qt.Dialog
