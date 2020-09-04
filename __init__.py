@@ -42,5 +42,5 @@ from GENERAL_TOOLS import Counter
 
 userRole_generator = Counter(Qt.UserRole)
 userType_generator = Counter(QStandardItem.UserType)
-
-from GUI.UI_Loader import GUI_Loader
+import GUI.UI_Loader
+GUI_Loader = GUI.UI_Loader.GUI_Loader
