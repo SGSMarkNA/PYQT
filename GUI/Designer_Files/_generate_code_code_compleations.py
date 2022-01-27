@@ -30,7 +30,7 @@ def generate_widget_code(tree,QT_modual_prefix="CFQT"):
 			
 	for wig in tree.findall(".//action"):
 		code.append("\t\t\tself.%s = %s.QAction()" % (wig.get("name"),QT_modual_prefix))
-	print "\n".join(code)
+	print(("\n".join(code)))
 
 file_directory = os.path.dirname(__file__)
 _ui = os.path.join(file_directory,"Simple_Display.ui")	

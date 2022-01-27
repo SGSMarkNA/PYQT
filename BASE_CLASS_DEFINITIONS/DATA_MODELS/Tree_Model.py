@@ -88,7 +88,7 @@ class TreeModel(PYQT.QAbstractItemModel):
 		try:
 			return self.createIndex(row, column, childItem)
 		except:
-			print "Can Not Create Index"
+			print("Can Not Create Index")
 
 		if childItem:
 			return self.createIndex(row, column, childItem)

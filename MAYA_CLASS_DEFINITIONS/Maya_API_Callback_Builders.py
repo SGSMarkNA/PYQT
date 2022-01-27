@@ -1039,11 +1039,11 @@ def debug_attr_changed(msg,plug,other,client):
 	# ConnectionMade
 	if Node_Message_Flages.Was_Connection_Made(msg):
 		if Node_Message_Flages.Was_Other_Plug_Set(msg):
-			print "other plug {} connected to {}".format(other.name(),plug.name())
+			print(("other plug {} connected to {}".format(other.name(),plug.name())))
 		else:
-			print "{} connected to {}".format(plug.name(),other.name())
+			print(("{} connected to {}".format(plug.name(),other.name())))
 	elif Node_Message_Flages.Was_Connection_Broken(msg):
 		if Node_Message_Flages.Was_Other_Plug_Set(msg):
-			print "other plug {} disconnected from {}".format(other.name(),plug.name())
+			print(("other plug {} disconnected from {}".format(other.name(),plug.name())))
 		else:
-			print "{} disconnected from {}".format(plug.name(),other.name())
+			print(("{} disconnected from {}".format(plug.name(),other.name())))

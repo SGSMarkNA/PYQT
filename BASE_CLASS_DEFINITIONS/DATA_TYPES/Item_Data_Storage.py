@@ -289,13 +289,13 @@ class _AUTO_PROPERTIES_METACLASS(type):
 			return key.replace(fn_get_prefix,"").replace(fn_set_prefix,"").replace(fn_end_prefix,"")
 			
 		collection = dict()
-		for key in attdict.keys():
+		for key in list(attdict.keys()):
 			if key.startswith(fn_get_prefix) or key.startswith(fn_set_prefix):
 				if key.endswith(fn_end_prefix):
 					prop_name = get_prop_name(key)
 					collection[prop_name] = dict()
 		
-		for prop_name,prop_data in collection.iteritems():
+		for prop_name,prop_data in list(collection.items()):
 			get_fn = fn_get_expr.format(prop_name)
 			set_fn = fn_set_expr.format(prop_name)
 			
@@ -333,14 +333,13 @@ class _AUTO_PROPERTIES_METACLASS(type):
 # ======================================================================
 
 ########################################################################
-class Standered_Item(object):
+class Standered_Item(object, metaclass=_AUTO_PROPERTIES_METACLASS):
 	"""
 	Class Info:
 	===============
 	| This Is The Base Class For Item Data
 	| It Stores Data That It Needs To Display Itself
 	"""
-	__metaclass__ = _AUTO_PROPERTIES_METACLASS
 	DEF_VALS      = DATA_DEFAULT_VALUES
 	H_ALIGNMENT   = Constants.AlignmentFlag.Horizontal
 	V_ALIGNMENT   = Constants.AlignmentFlag.Vertical
@@ -435,7 +434,7 @@ class Standered_Item(object):
 	def get_Current_State(self):
 		""""""
 		state = dict()
-		for key in self.__dict__.keys():
+		for key in list(self.__dict__.keys()):
 			if key.startswith("_item_"):
 				val = getattr(self, key)
 				if not val is None:
@@ -450,7 +449,7 @@ class Standered_Item(object):
 		""""""
 		if not isinstance(state,dict):
 			raise ValueError("input state must be a dict and a %r was given" % type(state))
-		for key, val in state.iteritems():
+		for key, val in list(state.items()):
 			if hasattr(self, "_item_"+key):
 				if val is not None:
 					try:
@@ -525,7 +524,7 @@ class Standered_Item(object):
 			return self._item_status_tip
 	#----------------------------------------------------------------------
 	def _fn_set_status_tip_value(self, value):
-		if not isinstance(value,(str,unicode)):
+		if not isinstance(value,str):
 			raise ValueError("input value must be an instance of (str,unicode) and a %r was given" % type(value))
 		self._item_status_tip = value
 	#----------------------------------------------------------------------
@@ -536,7 +535,7 @@ class Standered_Item(object):
 			return self._item_tool_tip
 	#----------------------------------------------------------------------
 	def _fn_set_tool_tip_value(self, value):
-		if not isinstance(value,(str,unicode)):
+		if not isinstance(value,str):
 			raise ValueError("input value must be an instance of (str,unicode) and a %r was given" % type(value))
 		self._item_tool_tip = value
 	#----------------------------------------------------------------------
@@ -549,10 +548,10 @@ class Standered_Item(object):
 		""""""
 		if value is None:
 			self._item_vertical_alignment = value
-		elif value in self.V_ALIGNMENT.Values.keys():
+		elif value in list(self.V_ALIGNMENT.Values.keys()):
 			self._item_vertical_alignment = self.V_ALIGNMENT.Values[value]
 		else:
-			raise ValueError("input value must be one of the fallowing (%s) and a %r was given" % (",".join(self.V_ALIGNMENT.Values.keys()), value))
+			raise ValueError("input value must be one of the fallowing (%s) and a %r was given" % (",".join(list(self.V_ALIGNMENT.Values.keys())), value))
 		self._update_text_alignment()
 	#----------------------------------------------------------------------
 	def _fn_get_horizontal_alignment_value(self):
@@ -563,10 +562,10 @@ class Standered_Item(object):
 	def _fn_set_horizontal_alignment_value(self, value):
 		if value is None:
 			self._item_horizontal_alignment = value
-		elif value in self.H_ALIGNMENT.Values.keys():
+		elif value in list(self.H_ALIGNMENT.Values.keys()):
 			self._item_horizontal_alignment = self.H_ALIGNMENT.Values[value]
 		else:
-			raise ValueError("input value must be one of the fallowing (%s) and a %r was given" % (",".join(self.H_ALIGNMENT.Values.keys()), value))
+			raise ValueError("input value must be one of the fallowing (%s) and a %r was given" % (",".join(list(self.H_ALIGNMENT.Values.keys())), value))
 		self._update_text_alignment()
 	#----------------------------------------------------------------------
 	def _fn_get_text_alignment_value(self):
@@ -581,7 +580,7 @@ class Standered_Item(object):
 			return self._item_font_family
 	#----------------------------------------------------------------------
 	def _fn_set_font_family_value(self, value):
-		if not isinstance(value,(str, unicode)):
+		if not isinstance(value,str):
 			raise ValueError("input value must be an instance of str, unicode and a %r was given" % type(value))
 		self._item_font_family = value
 		self._update_font()
@@ -734,7 +733,7 @@ class Standered_Item(object):
 			return self._item_display_name
 	#----------------------------------------------------------------------
 	def _fn_set_display_name_value(self, value):
-		if not isinstance(value,(str, unicode, bool, int)):
+		if not isinstance(value,(str, bool, int)):
 			raise ValueError("input value must be an instance of (str,unicode) and a %r was given" % type(value))
 		self._item_display_name = value
 	#----------------------------------------------------------------------
@@ -832,7 +831,7 @@ class Standered_Item(object):
 			if isinstance(self._item_foreground_color, PYQT.Qt.GlobalColor):
 				self._data_foreground_color = PYQT.QColor(self._item_foreground_color)
 			else:
-				if isinstance(self._item_foreground_color,basestring):
+				if isinstance(self._item_foreground_color,str):
 					self._data_foreground_color = PYQT.QColor(self._item_foreground_color)
 				else:
 					self._data_foreground_color = PYQT.QColor(*self._item_foreground_color)
@@ -842,7 +841,7 @@ class Standered_Item(object):
 		if self._item_background_color is None:
 			self._data_background_color = None
 		else:
-			if isinstance(self._item_background_color,basestring):
+			if isinstance(self._item_background_color,str):
 				self._data_background_color = PYQT.QColor(self._item_background_color)
 			elif isinstance(self._item_background_color,CFQT.Qt.GlobalColor):
 				self._data_background_color = PYQT.QColor(self._item_background_color)
@@ -1087,34 +1086,34 @@ class Standered_Item_List_Combo_Box(QComboBox.ComboBox):
 	#----------------------------------------------------------------------
 	def myactived(self,value):
 		""""""
-		print "item activated {}".format(value)
+		print(("item activated {}".format(value)))
 		self._item_list.active_index=value
 	#----------------------------------------------------------------------
 	def myhighlighted(self,value):
 		""""""
-		print "highlighted Changed {}".format(value)
+		print(("highlighted Changed {}".format(value)))
 		#self._item_list.active_index=value
 	#----------------------------------------------------------------------
 	def mycurrentIndexChanged(self,value):
 		""""""
-		print "current Index Changed {}".format(value)
+		print(("current Index Changed {}".format(value)))
 		self._item_list.active_index=value
 	#----------------------------------------------------------------------
 	def myeditTextChanged(self,value):
 		""""""
-		print "current Text Changed {}".format(value)
+		print(("current Text Changed {}".format(value)))
 		#self._item_list.active_item.display_name=value
 	#----------------------------------------------------------------------
 	def showPopup(self):
 		""""""
 		super(Standered_Item_List_Combo_Box,self).showPopup()
-		print "Popup Shown"
+		print("Popup Shown")
 		self._item_list.active_index=self.CurrentIndex
 	#----------------------------------------------------------------------
 	def hidePopup(self):
 		""""""
 		super(Standered_Item_List_Combo_Box,self).hidePopup()
-		print "Popup Hidden"
+		print("Popup Hidden")
 		self._item_list.active_index=self.CurrentIndex
 ########################################################################
 class Standered_Item_List_Data_Editor(Item_Data_Editor):
@@ -1139,9 +1138,8 @@ class Standered_Item_List_Data_Editor(Item_Data_Editor):
 		
 
 ######################################################################## 
-class Standered_Item_List(list):
+class Standered_Item_List(list, metaclass=_AUTO_PROPERTIES_METACLASS):
 	""""""
-	__metaclass__ = _AUTO_PROPERTIES_METACLASS
 	#----------------------------------------------------------------------
 	def __init__(self,*args,**kwargs):
 		"""Constructor"""

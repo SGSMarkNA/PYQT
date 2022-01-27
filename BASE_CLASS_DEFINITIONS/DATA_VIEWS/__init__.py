@@ -1,4 +1,4 @@
-import Header_Views
-import Tree_Views
-import List_Views
-import Table_Views
+from . import Header_Views
+from . import Tree_Views
+from . import List_Views
+from . import Table_Views

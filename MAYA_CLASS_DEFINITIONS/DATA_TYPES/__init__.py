@@ -1,2 +1,2 @@
-import Model_Items
-import Item_Data_Storage
+from . import Model_Items
+from . import Item_Data_Storage

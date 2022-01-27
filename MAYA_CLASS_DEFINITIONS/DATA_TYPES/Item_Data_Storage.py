@@ -1,6 +1,6 @@
 import PYQT
 from PYQT.BASE_CLASS_DEFINITIONS.DATA_TYPES import Item_Data_Storage
-from outliner_icons import *
+from .outliner_icons import *
 from ..Item_Data_Roles import Maya_Item_Data_Roles
 import maya.api.OpenMaya as OM
 import maya.cmds as cmds
@@ -24,7 +24,7 @@ _Global_Outline_Icon_Lookup = _build_Outliner_Icon_Dict_Lookup()
 #----------------------------------------------------------------------
 def create_Outline_Icon(node_type_name):
 	global _Global_Outline_Icon_Lookup
-	if not node_type_name in _Global_Outline_Icon_Lookup.keys():
+	if not node_type_name in list(_Global_Outline_Icon_Lookup.keys()):
 		node_type_name = "default"
 	lookup_val = _Global_Outline_Icon_Lookup[node_type_name]
 	if isinstance(lookup_val, str):
@@ -112,7 +112,7 @@ class Maya_Plug_Data(Internal_Item_Data):
 		self._py_node = None
 		if isinstance(plug,pm.Attribute):
 			self._py_node = plug
-		elif isinstance(plug,basestring):
+		elif isinstance(plug,str):
 			self._py_node = pm.PyNode(plug)
 		else:
 			raise ValueError("Invalid input type given")
@@ -180,7 +180,7 @@ class Maya_Node_Data(Internal_Item_Data):
 		if isinstance(node,pm.PyNode):
 			mobject = name_To_MObject(node.name())
 			self._py_node = node
-		elif isinstance(node,basestring):
+		elif isinstance(node,str):
 			mobject = name_To_MObject(str(node))
 		elif isinstance(node,OM.MObject):
 			mobject = node
@@ -208,7 +208,7 @@ class Maya_Node_Data(Internal_Item_Data):
 	#----------------------------------------------------------------------
 	def _set_display_name(self, value):
 		if self._Mobject_handle.isValid():
-			if not isinstance(value,(str, unicode)):
+			if not isinstance(value,str):
 				raise ValueError("input value must be an instance of (str,unicode) and a %r was given" % type(value))
 			self.internal_data.rename(value)
 	#----------------------------------------------------------------------

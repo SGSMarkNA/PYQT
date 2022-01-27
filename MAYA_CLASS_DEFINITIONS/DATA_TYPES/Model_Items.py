@@ -1,6 +1,6 @@
 from PYQT import BASE_CLASS_DEFINITIONS
-import Node_Item_Data
-import Item_Data_Storage
+from . import Node_Item_Data
+from . import Item_Data_Storage
 from ..Item_Data_Roles import Maya_Item_Data_Roles
 from PYQT import userType_generator
 import pymel.core as pm
@@ -32,7 +32,7 @@ class Base_Model_Item(BASE_CLASS_DEFINITIONS.DATA_TYPES.Model_Items.Base_Model_I
 				else:
 					raise ValueError("index %i in child_items arg must be a instance of Tree_Item and a %r was found" % (i, type(column_item)) )
 				self._column_items.items.append(column_item)
-		elif isinstance(items,basestring):
+		elif isinstance(items,str):
 			column_item = Item_Data_Storage.Internal_Item_Data(tree_item=self,display_name=items)
 			self._column_items.items.append(column_item)
 		else:

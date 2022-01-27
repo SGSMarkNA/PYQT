@@ -26,7 +26,7 @@ class WidgetHierarchyTree(MayaQWidgetBaseMixin, QTreeView):
             self.rootWidget = rootWidget
         else:
             mayaMainWindowPtr = omui.MQtUtil.mainWindow() 
-            self.rootWidget = wrapInstance(long(mayaMainWindowPtr), QWidget)
+            self.rootWidget = wrapInstance(int(mayaMainWindowPtr), QWidget)
 
         self.populateModel()
 
