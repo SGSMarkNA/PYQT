@@ -14,9 +14,13 @@ def _build_Outliner_Icon_Dict_Lookup():
 	file_path = os.path.join(os.path.dirname(__file__),"Outline_Icons","outliner_icons.qrc")
 	tree = etree.parse(file_path)
 	root = tree.getroot()
-	child = root.getchildren()[0]	
-	for elem in child.getchildren():
-		res[elem.attrib["alias"]] = ":/out/"+elem.attrib["alias"]
+	try:
+		child = root.getchildren()[0]
+		for elem in child.getchildren():
+			res[elem.attrib["alias"]] = ":/out/"+elem.attrib["alias"]
+	except:
+		for elem in list(root.iterfind("*/file")):
+			res[elem.get("alias")] = ":/out/"+elem.get("alias")
 	return res
 
 _Global_Outline_Icon_Lookup = _build_Outliner_Icon_Dict_Lookup()
